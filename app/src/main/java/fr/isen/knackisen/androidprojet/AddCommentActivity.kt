@@ -52,11 +52,17 @@ class AddCommentActivity : AppCompatActivity() {
             val commentBody = binding.commentText.text.toString()
             binding.commentText.text = null
 
-            val comment = Comment( listComment.size.toString(), commentBody, user)
-            listComment = listComment.plus(comment)
-            database.getReference("comments").setValue(listComment)
+            var commentDatabase = database.getReference("comments")
+            var key = commentDatabase.push().key
+
+            val comment = key?.let { it1 -> Comment(it1, commentBody, user) }
+
+            commentDatabase.child(key!!).setValue(comment)
+
 
             finish()
         }
     }
+
+
 }

@@ -60,6 +60,10 @@ private lateinit var listComment: List<Comment>
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        commentsAdapter.updateList(listComment)
+    }
 
 
 
