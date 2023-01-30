@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AndroidProjetKnackISEN</string>
+    <string name="newCommentButton">Comment</string>
+    <string name="newPostButton">Post</string>
 </resources>

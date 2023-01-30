@@ -45,7 +45,9 @@ class LoginActivity : AppCompatActivity() {
 
         binding.googleLogin.setOnClickListener { view: View? ->
             Toast.makeText(this, "Logging In", Toast.LENGTH_SHORT).show()
-            signInGoogle()
+            // Go to CommentActivity
+            val i = Intent(this@LoginActivity, CommentsActivity::class.java)
+            startActivity(i)
         }
 
     }
