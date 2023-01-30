@@ -1,3 +1,6 @@
 package fr.isen.knackisen.androidprojet.data.model
 
-data class Comment()
+data class Comment(
+    val content: String,
+    val user: User,
+)
