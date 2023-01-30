@@ -1,15 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_margin="10dp"
+    android:layout_height="300dp"
     app:cardElevation="6dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
         android:padding="5dp">
 
@@ -20,30 +18,32 @@
             android:contentDescription="img" />
 
         <LinearLayout
-            android:layout_width="340dp"
-            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:layout_height="288dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/nameUserPostView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="15dp"
                 android:text="Name"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
 
             <TextView
-                android:id="@+id/contentPostView"
+                android:id="@+id/pseudo2PostView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="15dp"
                 android:text="None"
                 android:textSize="10sp"
                 android:textStyle="normal" />
+
+            <TextView
+                android:id="@+id/contentPostView"
+                android:layout_width="match_parent"
+                android:layout_height="252dp"
+                android:text="None" />
 
         </LinearLayout>
 

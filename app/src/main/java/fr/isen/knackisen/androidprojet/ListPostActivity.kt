@@ -69,7 +69,7 @@ class ListPostActivity : AppCompatActivity() {
             ListPostAdapter(arrayListOf()) { post ->
 
                 /*val intent = Intent(this, ::class.java)
-                intent.putExtra("Items", post)
+                intent.putExtra("post", post)
                 startActivity(intent)*/
             }
 

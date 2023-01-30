@@ -4,9 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
-import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.R
 import fr.isen.knackisen.androidprojet.data.model.Post
 
@@ -18,7 +16,7 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         // val imageView: ImageView = itemView.findViewById(R.id.imageview)
         val nameView: TextView = itemView.findViewById(R.id.nameUserPostView)
         val imageView: ImageView = itemView.findViewById(R.id.imagePostView)
-        val contentView: TextView = itemView.findViewById(R.id.contentPostView)
+        val contentView: TextView = itemView.findViewById(R.id.pseudo2PostView)
     }
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
