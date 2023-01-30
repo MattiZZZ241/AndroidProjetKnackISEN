@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1002802783026",
+    "firebase_url": "https://knack-isen-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "knack-isen",
     "storage_bucket": "knack-isen.appspot.com"
   },
