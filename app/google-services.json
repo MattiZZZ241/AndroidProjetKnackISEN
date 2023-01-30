@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1002802783026",
+    "project_id": "knack-isen",
+    "storage_bucket": "knack-isen.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1002802783026:android:626e110e1e46fa0310ad2b",
+        "android_client_info": {
+          "package_name": "fr.isen.knackisen.androidprojet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1002802783026-n69qs458052qekbq8t8qd5e15p14c6fa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAOrnRfcWeOrV8hnvd4AfXLNC9ysxGXRog"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1002802783026-n69qs458052qekbq8t8qd5e15p14c6fa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
