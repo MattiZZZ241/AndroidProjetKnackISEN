@@ -33,6 +33,13 @@ class LoginActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        binding.button2.setOnClickListener {
+
+            val intent = Intent(this, ListPostActivity::class.java)
+            startActivity(intent)
+        }
+
+
         FirebaseApp.initializeApp(this)
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)

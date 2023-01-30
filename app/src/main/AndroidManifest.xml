@@ -12,6 +12,9 @@
         android:theme="@style/Theme.AndroidProjetKnackISEN"
         tools:targetApi="31">
         <activity
+            android:name=".ListPostActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
