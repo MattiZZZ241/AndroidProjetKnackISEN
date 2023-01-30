@@ -5,4 +5,6 @@ data class Post(
     val content: String,
     val user: User,
     val reactions: Reactions,
-)
+): java.io.Serializable{
+
+}
