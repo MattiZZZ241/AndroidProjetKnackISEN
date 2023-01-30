@@ -31,6 +31,11 @@ class CreatePostActivity : AppCompatActivity() {
             writePost(post)
         }
 
+        binding.buttonProfile.setOnClickListener{
+            val intent = Intent(this, DetailUserInfo::class.java)
+            startActivity(intent)
+        }
+
         binding.logoutCreatpost.setOnClickListener{
             Firebase.auth.signOut()
             val intent = Intent(this, LoginActivity::class.java)

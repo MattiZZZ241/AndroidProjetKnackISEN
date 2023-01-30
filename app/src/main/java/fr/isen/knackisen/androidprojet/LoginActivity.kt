@@ -34,6 +34,7 @@ class LoginActivity : AppCompatActivity() {
             updateUI(Firebase.auth.currentUser)
         }else{
             binding.connexionSignin.setOnClickListener{
+
                 val mail: String = binding.mailSignin.getText().toString().trim()
                 val mdp: String = binding.pwSignin.getText().toString().trim()
                 if(mail.isEmpty() || mdp.isEmpty()){
