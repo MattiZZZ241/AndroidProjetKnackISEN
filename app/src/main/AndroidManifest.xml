@@ -12,6 +12,15 @@
         android:theme="@style/Theme.AndroidProjetKnackISEN"
         tools:targetApi="31">
         <activity
+            android:name=".ReactionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddCommentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CommentsActivity"
+            android:exported="false" />
+        <activity
             android:name=".LoginActivity"
             android:exported="true">
             <intent-filter>
