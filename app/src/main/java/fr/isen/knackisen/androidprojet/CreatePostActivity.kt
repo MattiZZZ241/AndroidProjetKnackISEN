@@ -2,8 +2,8 @@ package fr.isen.knackisen.androidprojet
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.ktx.app
 import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
@@ -36,6 +36,7 @@ class CreatePostActivity : AppCompatActivity() {
     }
 
     private fun writePost(post : Post){
-        //TODO : Write post to database
+        val database = Firebase.database.getReference("posts")
+        database.setValue(post)
     }
 }
