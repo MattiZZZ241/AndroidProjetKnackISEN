@@ -15,7 +15,7 @@ import fr.isen.knackisen.androidprojet.databinding.ActivityListPostBinding
 
 class ListPostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListPostBinding
-    private lateinit var postContaiener: MutableList<Post>
+    private lateinit var postContaiener: List<Post>
 
 
 
@@ -31,57 +31,37 @@ class ListPostActivity : AppCompatActivity() {
         val database = Firebase.database
         database.reference.child("posts").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                for (snapshot in task.result.children) {
-
+                postContaiener = listOf()
+                for (snapshot in task.result!!.children) {
                     val id = snapshot.child("id").value.toString()
                     val content = snapshot.child("content").value.toString()
 
-                    val user = User(
-                        snapshot.child("user").child("id").value as Int,
-                        snapshot.child("user").child("name").value.toString(),
-                    )
+                    val name = snapshot.child("user").child("name").value.toString()
+                    val userId = snapshot.child("user").child("id").value.toString().toInt()
+                    val user = User(userId, name)
 
+                    val comment = Comment(id,content, user)
 
-                  /*  val name = snapshot.child("user").child("name").value.toString()
-                    //val image = snapshot.child("user").child("avatar").value.toString()
-                    val userID = snapshot.child("user").child("id").value
-
-                    Log.d("name", name)
-                    Log.d("id", userID.toString())
-
-                    val user = User(userID as Int, name)
-
-
-                    val commentContent = snapshot.child("comment").child("content").value.toString()
-
-                    val comment = Comment(commentContent, user)
                     val like = snapshot.child("reactions").child("like").value.toString().toInt()
-                    val reactions = Reactions(like, listOf(comment))
 
-                    postContaiener.add(Post(id.toInt(), content, user , reactions))*/
+                    val reactions = Reactions(like, listOf())
 
+                    val post = Post(id, content, user, reactions)
+
+
+                    postContaiener += post
                 }
-                //recyclerViewRefresh()
+                Log.i("TAG", "Value is: ${postContaiener}")
+                val recyclerView = binding.recyclerview
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                val adapter = recyclerView.adapter as ListPostAdapter
+                adapter.refreshList(postContaiener)
+
+            } else {
+                Log.d("VALUE", task.exception?.message.toString())
             }
         }
     }
-
-
-    fun recyclerViewRefresh() {
-        val recyclerView = binding.recyclerview
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        recyclerView.adapter = ListPostAdapter(arrayListOf()) { post ->
-                /*val intent = Intent(this, ::class.java)
-                intent.putExtra("post", post)
-                startActivity(intent)*/
-            }
-
-
-        val adapter = recyclerView.adapter as ListPostAdapter
-        adapter.refreshList(postContaiener)
-    }
-
 
         override fun onDestroy() {
             super.onDestroy()

@@ -47,7 +47,7 @@ class ListPostAdapter(private val list: ArrayList<Post>, private val OnItemClick
         }
     }
     @SuppressLint("NotifyDataSetChanged")
-    fun refreshList(newList: MutableList<Post>) {
+    fun refreshList(newList: List<Post>) {
         list.clear()
         list.addAll(newList)
         notifyDataSetChanged()
