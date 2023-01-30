@@ -10,7 +10,7 @@ import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.R
 import fr.isen.knackisen.androidprojet.data.model.Post
 
-class ListPostAdapter(private val list: List<Post>, private val OnItemClickListener: (Post) -> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
+class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
     // adapter conteneur
     // RecyclerView contenu
     // Holds the views for adding it to text
@@ -48,8 +48,7 @@ class ListPostAdapter(private val list: List<Post>, private val OnItemClickListe
     }
     @SuppressLint("NotifyDataSetChanged")
     fun refreshList(newList: List<Post>) {
-        
-
+        list = newList
         notifyDataSetChanged()
     }
     // return the number of the items in the list
