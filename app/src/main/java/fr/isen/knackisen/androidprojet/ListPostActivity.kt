@@ -1,6 +1,7 @@
 package fr.isen.knackisen.androidprojet
 
 import ListPostAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -52,10 +53,7 @@ class ListPostActivity : AppCompatActivity() {
                     postContaiener += post
                 }
                 Log.i("TAG", "Value is: ${postContaiener}")
-                val recyclerView = binding.recyclerview
-                recyclerView.layoutManager = LinearLayoutManager(this)
-                val adapter = recyclerView.adapter as ListPostAdapter
-                adapter.refreshList(postContaiener)
+                recyclerViewRefresh()
 
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
@@ -63,7 +61,24 @@ class ListPostActivity : AppCompatActivity() {
         }
     }
 
-        override fun onDestroy() {
+    private fun recyclerViewRefresh() {
+        val recyclerView = binding.recyclerview
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        recyclerView.adapter =
+            ListPostAdapter(arrayListOf()) { post ->
+
+                /*val intent = Intent(this, ::class.java)
+                intent.putExtra("Items", post)
+                startActivity(intent)*/
+            }
+
+        val adapter = recyclerView.adapter as ListPostAdapter
+        adapter.refreshList(postContaiener)
+
+    }
+
+    override fun onDestroy() {
             super.onDestroy()
             Log.d("onDestroy", "$this onDestroy")
         }
