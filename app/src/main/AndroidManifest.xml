@@ -11,6 +11,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidProjetKnackISEN"
         tools:targetApi="31">
+        
+        <activity
+            android:name=".CreatePostActivity"
+            android:exported="true">
+        </activity>
         <activity
             android:name=".ReactionsActivity"
             android:exported="false" />
