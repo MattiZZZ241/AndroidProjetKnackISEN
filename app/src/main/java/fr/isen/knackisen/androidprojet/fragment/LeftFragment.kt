@@ -94,8 +94,7 @@ class LeftFragment : Fragment() {
         val onClick = fun (post:Post): Unit {
             Log.d("post", post.toString())
         }
-        recyclerView.adapter =
-            ListPostAdapter(arrayListOf(), onClick, toCreateComment)
+        recyclerView.adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment)
 
         val adapter = recyclerView.adapter as ListPostAdapter
         adapter.refreshList(postContainer)

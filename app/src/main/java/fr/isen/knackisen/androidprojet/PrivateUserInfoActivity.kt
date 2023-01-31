@@ -23,11 +23,7 @@ class PrivateUserInfoActivity : AppCompatActivity() {
 
         user = Firebase.auth.currentUser!!
 
-        if (user != null) {
-
-            binding.userInfoEmail.setText(user.email.toString())
-
-        }
+        binding.userInfoEmail.setText(user.email.toString())
 
         binding.privateSaveButton.setOnClickListener {
             updatePrivate()

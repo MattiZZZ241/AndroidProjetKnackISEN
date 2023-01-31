@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.AndroidProjetKnackISEN" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.AndroidProjetKnackISEN" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/sausage_orange</item>
         <item name="colorPrimaryVariant">@color/sausage_pink_pastel</item>

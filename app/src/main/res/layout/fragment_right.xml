@@ -12,6 +12,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:text="Save"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.526"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +27,6 @@
         android:ems="10"
         android:hint="Write your name"
         android:inputType="textPersonName"
-        android:textColor="@color/sausage_misty_rose"
         app:layout_constraintStart_toStartOf="@+id/infoName"
         app:layout_constraintTop_toBottomOf="@+id/infoName" />
 
@@ -35,8 +36,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="100dp"
-        android:text="Name:"
-        android:textColor="@color/sausage_misty_rose"
+        android:text="Name :"
+        android:textColor="@color/sausage_orange"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,30 +48,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="24dp"
-        android:text="Age:"
-        android:textColor="@color/sausage_misty_rose"
+        android:text="Age :"
+        android:textColor="@color/sausage_orange"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoName" />
-
-    <ImageView
-        android:id="@+id/logout_creatpost"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/logout_white"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/privateInfos"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
-        android:src="@drawable/lock_white"
-        app:layout_constraintEnd_toStartOf="@+id/logout_creatpost"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/userInfoAge"
@@ -79,7 +62,27 @@
         android:ems="10"
         android:hint="Write your age"
         android:inputType="number"
-        android:textColor="@color/sausage_misty_rose"
         app:layout_constraintStart_toStartOf="@+id/infoAge"
         app:layout_constraintTop_toBottomOf="@+id/infoAge" />
+
+    <ImageView
+        android:id="@+id/privateInfos"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/lock_black"
+        app:layout_constraintEnd_toStartOf="@+id/logout_creatpost"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/logout_creatpost"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:src="@drawable/logout_black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
