@@ -65,7 +65,7 @@ class SignupActivity : AppCompatActivity() {
 
     private fun updateUI(user: FirebaseUser?) {
         if(user != null){
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, FormInfoUserActivity::class.java)
             startActivity(intent)
         }
     }
