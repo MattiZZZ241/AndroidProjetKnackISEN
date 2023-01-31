@@ -101,6 +101,11 @@ class LeftFragment : Fragment() {
         adapter.refreshList(postContainer)
     }
 
+    override fun onResume() {
+        super.onResume()
+        readDataFromFirebase()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         Log.d("onDestroy", "$this onDestroy")

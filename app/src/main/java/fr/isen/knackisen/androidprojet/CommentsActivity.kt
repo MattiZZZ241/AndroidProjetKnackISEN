@@ -90,7 +90,6 @@ private lateinit var listComment: List<Comment>
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.newComment.setOnClickListener { newComment() }
-
     }
 
 
