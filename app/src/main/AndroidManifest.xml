@@ -12,11 +12,14 @@
         android:theme="@style/Theme.AndroidProjetKnackISEN"
         tools:targetApi="33">
         <activity
-            android:name=".DetailUserInfo"
+            android:name=".PrivateUserInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".DetailUserInfoActivity"
             android:exported="false" />
         <activity
             android:name=".CreatePostActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ReactionsActivity"
             android:exported="false" />

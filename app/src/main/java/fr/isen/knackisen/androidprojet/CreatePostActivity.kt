@@ -32,7 +32,7 @@ class CreatePostActivity : AppCompatActivity() {
         }
 
         binding.buttonProfile.setOnClickListener{
-            val intent = Intent(this, DetailUserInfo::class.java)
+            val intent = Intent(this, DetailUserInfoActivity::class.java)
             startActivity(intent)
         }
 
