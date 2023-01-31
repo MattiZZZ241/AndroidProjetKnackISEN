@@ -39,12 +39,6 @@ class MidFragment : Fragment() {
             database.child(key!!).setValue(post)
             //writePost(post)
         }
-
-        binding.logoutCreatpost.setOnClickListener {
-            Firebase.auth.signOut()
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
-        }
         return binding.root
     }
 
