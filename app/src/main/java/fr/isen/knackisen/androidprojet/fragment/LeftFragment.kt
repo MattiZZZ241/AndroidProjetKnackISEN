@@ -13,6 +13,7 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import fr.isen.knackisen.androidprojet.AddCommentActivity
+import fr.isen.knackisen.androidprojet.CommentsActivity
 import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
@@ -52,7 +53,7 @@ class LeftFragment : Fragment() {
 
                     // get comment list
                     val commentList = mutableListOf<Comment>()
-                    for (comment in snapshot.child("comment").children) {
+                    for (comment in snapshot.child("comments").children) {
                         val commentId = comment.child("id").value.toString()
                         val commentContent = comment.child("content").value.toString()
 
@@ -85,6 +86,15 @@ class LeftFragment : Fragment() {
     private fun recyclerViewRefresh() {
         val recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(activity)
+
+        /*recyclerView.adapter =
+            ListPostAdapter(arrayListOf()) { post ->
+
+                val intent = Intent(this, DetailsDishesActivity::class.java)
+                intent.putExtra("Items", cartItem)
+                startActivity(intent)
+            }*/
+
         val toCreateComment = fun (post: Post): Unit {
             val i = Intent(activity, AddCommentActivity::class.java)
 
@@ -93,6 +103,11 @@ class LeftFragment : Fragment() {
         }
         val onClick = fun (post:Post): Unit {
             Log.d("post", post.toString())
+
+            val intent = Intent(activity, CommentsActivity::class.java)
+            intent.putExtra("Items", Gson().toJson(post))
+            startActivity(intent)
+
         }
         recyclerView.adapter =
             ListPostAdapter(arrayListOf(), onClick, toCreateComment)
