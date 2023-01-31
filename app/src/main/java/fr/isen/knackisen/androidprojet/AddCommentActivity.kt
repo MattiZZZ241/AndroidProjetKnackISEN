@@ -16,6 +16,9 @@ import fr.isen.knackisen.androidprojet.databinding.ActivityAddCommentBinding
 class AddCommentActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAddCommentBinding
     private lateinit var postReference: DatabaseReference
+    private lateinit var commentsReference: DatabaseReference
+    private lateinit var userReference: DatabaseReference
+
     private lateinit var database: FirebaseDatabase
     private lateinit var listComment: List<Comment>
 
@@ -26,7 +29,10 @@ class AddCommentActivity : AppCompatActivity() {
         setContentView(binding.root)
         database = Firebase.database
         postReference = database.getReference("posts")
+        commentsReference = database.getReference("comments")
+        userReference = database.getReference("users")
         listComment = listOf()
+
 
 
         var postString = intent.getStringExtra("post")
@@ -35,14 +41,11 @@ class AddCommentActivity : AppCompatActivity() {
             finish()
         }
         var parentPost: Post = Gson().fromJson(postString, Post::class.java)
-        Log.i("Get intent", "Parent post: ${parentPost}")
         var parentID:List<String> = parentPost.id.split(",").map { it.trim() }
-        Log.d("Parent ID", parentID.toString())
         for(id in parentID) {
             postReference = postReference.child(id).child("comments")
         }
-        Log.d("Post reference", postReference.toString())
-
+        postReference= postReference.parent!!
         postReference.get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 listComment = listOf()
@@ -81,7 +84,7 @@ class AddCommentActivity : AppCompatActivity() {
             val commentBody = binding.commentText.text.toString()
             binding.commentText.text = null
 
-            var key = postReference.push().key
+            var key = commentsReference.push().key
             if (key == null) {
                 Log.e("Get key", "Key is null")
                 return@setOnClickListener
@@ -89,7 +92,10 @@ class AddCommentActivity : AppCompatActivity() {
 
             var idComment = (parentID + key).toString()
             val comment = Comment(idComment, commentBody, user)
-            postReference.child(key).child("reactions").setValue(comment)
+
+            postReference.child("reactions").child("comments").child(key).setValue(comment)
+            commentsReference.child(key).setValue(comment)
+            userReference.child(user.id).child("comments").child(key).setValue(comment)
 
             finish()
         }

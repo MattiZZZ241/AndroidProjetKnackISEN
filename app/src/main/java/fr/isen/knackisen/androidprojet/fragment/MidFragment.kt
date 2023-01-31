@@ -38,10 +38,10 @@ class MidFragment : Fragment() {
             Log.e("ERROR", "Key is null or empty")
             return binding.root
         }
+
         binding.buttonPost.setOnClickListener {
             val post = prepareData(currentUser, key, reactions)
             database.child(key).setValue(post)
-            //writePost(post)
         }
 
         binding.logoutCreatpost.setOnClickListener {

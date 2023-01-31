@@ -92,12 +92,11 @@ class LeftFragment : Fragment() {
             i.putExtra("post", Gson().toJson(post))
             startActivity(i)
         }
-        val onClick = fun (post:Post): Unit {
 
+        val onClick = fun (post:Post): Unit {
             val intent = Intent(activity, CommentsActivity::class.java)
             intent.putExtra("post", Gson().toJson(post))
             startActivity(intent)
-
         }
 
         val onLike = fun (post: Post): Unit {

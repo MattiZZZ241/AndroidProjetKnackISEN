@@ -77,7 +77,6 @@ class CommentsActivity : AppCompatActivity() {
         binding.commentButton.setOnClickListener { newComment() }
     }
 
-
     private fun subToComments(){
         database.reference.child("comments").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -92,7 +91,6 @@ class CommentsActivity : AppCompatActivity() {
                     listComment += comment
                 }
                 commentsAdapter.updateList(listComment)
-
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
             }
