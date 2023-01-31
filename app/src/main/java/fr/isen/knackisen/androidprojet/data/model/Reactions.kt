@@ -1,6 +1,7 @@
 package fr.isen.knackisen.androidprojet.data.model
 
 data class Reactions(
-    val like: Int,
+    var like: Int,
+    var userLiked: Boolean,
     val comment: List<Comment>,
 )

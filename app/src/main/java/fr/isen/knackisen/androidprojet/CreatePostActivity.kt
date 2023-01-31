@@ -21,7 +21,7 @@ class CreatePostActivity : AppCompatActivity() {
 
         val currentUser = User(1, "Example User")
         val comments : List<Comment> = listOf()
-        val reactions = Reactions(0, comments)
+        val reactions = Reactions(0,false, comments)
 
         binding = ActivityCreatePostBinding.inflate(layoutInflater)
         setContentView(binding.root)
