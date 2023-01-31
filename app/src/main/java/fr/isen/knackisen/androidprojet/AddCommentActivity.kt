@@ -45,7 +45,7 @@ class AddCommentActivity : AppCompatActivity() {
                     var id = snapshot.child("id").value.toString()
                     var content = snapshot.child("content").value.toString()
                     var name = snapshot.child("user").child("name").value.toString()
-                    var user = User(1, name)
+                    var user = User("1", name)
                     var comment = Comment(id, content, user)
                     listComment += comment
                 }
@@ -58,7 +58,7 @@ class AddCommentActivity : AppCompatActivity() {
 
         binding.postButton.setOnClickListener( ) {
             // post to the Real time database (firebase)
-            val user = User(1, "name")
+            val user = User("1", "name")
             val commentBody = binding.commentText.text.toString()
             binding.commentText.text = null
 

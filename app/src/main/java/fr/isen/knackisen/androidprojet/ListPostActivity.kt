@@ -1,6 +1,7 @@
 package fr.isen.knackisen.androidprojet
 
 import ListPostAdapter
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -39,28 +40,29 @@ class ListPostActivity : AppCompatActivity() {
 
                     val id = snapshot.child("id").value.toString()
                     val content = snapshot.child("content").value.toString()
+                    Log.d("VALUE", content)
 
                     val name = snapshot.child("user").child("name").value.toString()
-                    val userId = snapshot.child("user").child("id").value.toString().toInt()
+                    val userId = snapshot.child("user").child("id").value.toString()
                     val user = User(userId, name)
 
                     // get comment list
                   val commentList = mutableListOf<Comment>()
-                    /*for (comment in snapshot.child("comment").children) {
+                    for (comment in snapshot.child("comment").children) {
                         val commentId = comment.child("id").value.toString()
                         val commentContent = comment.child("content").value.toString()
 
                         val commentName = comment.child("user").child("name").value.toString()
-                        val commentUserId = comment.child("user").child("id").value.toString().toInt()
+                        val commentUserId = comment.child("user").child("id").value.toString()
                         val commentUser = User(commentUserId, commentName)
 
                         commentList.add(Comment(commentId, commentContent, commentUser))
-                    }*/
+                    }
+                    Log.d("like", snapshot.child("reactions").child("like").value.toString())
 
+//                    val like = snapshot.child("reactions").child("like").value.toString().toInt()
 
-                    val like = snapshot.child("reactions").child("like").value.toString().toInt()
-
-                    val reactions = Reactions(like, false, commentList)
+                    val reactions = Reactions(2, false, commentList)
                     Log.d("reactions", commentList.toString())
 
                     val post = Post(id, content, user, reactions)
@@ -82,14 +84,16 @@ class ListPostActivity : AppCompatActivity() {
     private fun recyclerViewRefresh() {
         val recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(this)
-
+        var toCreateComment = fun (ids: String): Unit {
+            val i = Intent(this@ListPostActivity, AddCommentActivity::class.java)
+            i.putExtra("id", ids)
+            startActivity(i)
+        }
+        var onClick = fun (post:Post): Unit {
+            Log.d("post", post.toString())
+        }
         recyclerView.adapter =
-            ListPostAdapter(arrayListOf()) { post ->
-
-                /*val intent = Intent(this, ::class.java)
-                intent.putExtra("post", post)
-                startActivity(intent)*/
-            }
+            ListPostAdapter(arrayListOf(), onClick, toCreateComment)
 
         val adapter = recyclerView.adapter as ListPostAdapter
         adapter.refreshList(postContaiener)
