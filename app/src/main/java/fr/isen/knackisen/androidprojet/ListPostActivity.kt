@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
@@ -84,9 +85,10 @@ class ListPostActivity : AppCompatActivity() {
     private fun recyclerViewRefresh() {
         val recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(this)
-        var toCreateComment = fun (ids: String): Unit {
+        var toCreateComment = fun (post: Post): Unit {
             val i = Intent(this@ListPostActivity, AddCommentActivity::class.java)
-            i.putExtra("id", ids)
+
+            i.putExtra("post", Gson().toJson(post))
             startActivity(i)
         }
         var onClick = fun (post:Post): Unit {

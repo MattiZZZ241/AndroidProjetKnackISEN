@@ -11,7 +11,7 @@ import fr.isen.knackisen.androidprojet.ReactionsManager
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 
-class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit,  val toCreateComment: (String)-> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
+class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit, val toCreateComment: (Post) -> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
     // adapter conteneur
     // RecyclerView contenu
     // Holds the views for adding it to text
@@ -55,7 +55,7 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         }
 
         holder.commentButton.setOnClickListener {
-            toCreateComment(list[position].id)
+            toCreateComment(list[position])
         }
 
         /* if (itemsViewModel.user.image != "") {
