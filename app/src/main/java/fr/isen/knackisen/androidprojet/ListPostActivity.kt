@@ -60,7 +60,7 @@ class ListPostActivity : AppCompatActivity() {
 
                     val like = snapshot.child("reactions").child("like").value.toString().toInt()
 
-                    val reactions = Reactions(like, commentList)
+                    val reactions = Reactions(like, false, commentList)
                     Log.d("reactions", commentList.toString())
 
                     val post = Post(id, content, user, reactions)
