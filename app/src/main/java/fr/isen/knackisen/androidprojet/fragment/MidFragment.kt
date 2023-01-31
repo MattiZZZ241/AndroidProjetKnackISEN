@@ -10,7 +10,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fr.isen.knackisen.androidprojet.LoginActivity
-import fr.isen.knackisen.androidprojet.MainActivity
 import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
@@ -29,7 +28,7 @@ class MidFragment : Fragment() {
 
         val currentUser = User(1, "Example User")
         val comments: List<Comment> = listOf()
-        val reactions = Reactions(0, comments)
+        val reactions = Reactions(0, false, comments)
 
         binding.buttonPost.setOnClickListener {
             val post = prepareData(currentUser, reactions)
@@ -46,7 +45,7 @@ class MidFragment : Fragment() {
 
     private fun prepareData(currentUser: User, reactions: Reactions): Post {
         val content = binding.inputPost.text.toString()
-        return Post(1, content, currentUser, reactions)
+        return Post("1", content, currentUser, reactions)
     }
 
     private fun writePost(post: Post) {
