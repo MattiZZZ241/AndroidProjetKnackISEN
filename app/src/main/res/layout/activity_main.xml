@@ -7,16 +7,23 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/orange"
+        app:title="TabLayout"
+        app:titleTextColor="@color/white" />
+
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/sausage_misty_rose"
-        android:contentDescription="@string/navbar"
-        app:tabIconTint="@color/sausage_orange"
-        app:tabIndicatorColor="@color/sausage_orange"
-        app:tabSelectedTextColor="@color/sausage_orange"
-        app:tabTextColor="@color/black" />
+        android:background="@color/orange"
+        app:tabIconTint="@color/grey"
+        app:tabIndicatorColor="@color/white"
+        app:tabSelectedTextColor="@color/white"
+        app:tabTextColor="@color/grey" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"

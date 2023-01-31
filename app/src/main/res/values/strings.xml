@@ -4,9 +4,4 @@
     <string name="newPostButton">Post</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="write_your_post">Write your post :</string>
-    <string name="what_s_up">What\'s Up ?</string>
-    <string name="post">Post</string>
-    <string name="logout_icon">logout_icon</string>
-    <string name="navbar">navbar</string>
 </resources>
