@@ -32,7 +32,12 @@
             android:paddingLeft="0dp"
             android:paddingTop="0dp"
             android:paddingRight="0dp"
-            android:text="Comment" />
+            android:text="@string/newCommentButton" />
+
+        <Space
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
 
         <Button
             android:id="@+id/likeButton"
@@ -42,7 +47,7 @@
             android:paddingLeft="0dp"
             android:paddingTop="0dp"
             android:paddingRight="0dp"
-            android:text="Like" />
+            android:text="@string/Like" />
 
         <Space
             android:layout_width="wrap_content"
@@ -54,7 +59,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:text="XX"
+            android:text="@string/value"
             android:textColor="#DCDCDC" />
 
         <Space
@@ -67,7 +72,7 @@
         android:id="@+id/autor_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TextView"
+        android:text="@string/value"
         android:textColor="#DFDFDF"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -79,7 +84,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="TextView"
+        android:text="@string/value"
         android:textColor="#DFDFDF"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

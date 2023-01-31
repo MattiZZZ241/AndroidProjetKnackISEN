@@ -1,11 +1,10 @@
 package fr.isen.knackisen.androidprojet
 
-import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 
-class ReactionsManager {
+class ReactionsManager() {
 
     val reactions = Reactions(0, false, listOf())
 

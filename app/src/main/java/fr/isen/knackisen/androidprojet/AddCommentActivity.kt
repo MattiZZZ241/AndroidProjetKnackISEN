@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
@@ -59,6 +58,17 @@ class AddCommentActivity : AppCompatActivity() {
         binding.contentPostView.text = parentPost.content
         binding.likesCount.text = parentPost.reactions.like.toString()
 
+        binding.likeButton.setOnClickListener() {
+            if(parentPost.reactions.userLiked) {
+                parentPost.reactions.like -= 1
+                parentPost.reactions.userLiked = false
+            } else {
+                parentPost.reactions.like += 1
+                parentPost.reactions.userLiked = true
+            }
+            database.child("reactions").child("like").setValue(parentPost.reactions.like)
+            binding.likesCount.text = parentPost.reactions.like.toString()
+        }
 
         binding.postButton.setOnClickListener( ) {
             // post to the Real time database (firebase)
