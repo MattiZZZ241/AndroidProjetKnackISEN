@@ -84,6 +84,8 @@ class CommentsActivity : AppCompatActivity() {
                     var comment = Comment(id, content, user)
                     listComment += comment
                 }
+                listComment = listComment.drop(1)
+                //list without first post
                 commentsAdapter.updateList(listComment)
             } else {
                 Log.d("VALUE", task.exception?.message.toString())

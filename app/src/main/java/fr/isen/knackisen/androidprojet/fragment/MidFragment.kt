@@ -28,8 +28,16 @@ class MidFragment : Fragment() {
         _binding = FragmentMidBinding.inflate(inflater, container, false)
 
         val database = Firebase.database.getReference("posts")
+        var getUser = Firebase.auth.currentUser
+        if (getUser != null) {
+            if (getUser.uid == null) {
+                Log.e("Get user", "No user connected")
+                return binding.root
+            }
+        }
+        val user = User(getUser!!.uid, getUser.displayName.toString())
 
-        val currentUser = User("1", "Example User")
+        val currentUser = user
         val comments: List<Comment> = listOf(Comment("1", "Example Comment", currentUser))
         val reactions = Reactions(0, false, comments)
 

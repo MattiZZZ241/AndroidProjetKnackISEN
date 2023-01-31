@@ -3,6 +3,7 @@ package fr.isen.knackisen.androidprojet
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -53,7 +54,9 @@ class AddCommentActivity : AppCompatActivity() {
                     var id = snapshot.child("id").value.toString()
                     var content = snapshot.child("content").value.toString()
                     var name = snapshot.child("user").child("name").value.toString()
-                    var user = User("1", name)
+                    var userId = snapshot.child("user").child("id").value.toString()
+
+                    var user = User(userId, name)
                     var comment = Comment(id, content, user)
                     listComment += comment
                 }
@@ -80,7 +83,14 @@ class AddCommentActivity : AppCompatActivity() {
 
         binding.postButton.setOnClickListener( ) {
             // post to the Real time database (firebase)
-            val user = User("1", "name")
+            var currentUser = Firebase.auth.currentUser
+            if (currentUser != null) {
+                if (currentUser.uid == null) {
+                    Log.e("Get user", "No user connected")
+                    finish()
+                }
+            }
+            val user = User(currentUser!!.uid, currentUser.displayName.toString())
             val commentBody = binding.commentText.text.toString()
             binding.commentText.text = null
 
