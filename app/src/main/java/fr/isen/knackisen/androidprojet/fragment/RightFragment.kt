@@ -19,6 +19,7 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
+import fr.isen.knackisen.androidprojet.LoginActivity
 import fr.isen.knackisen.androidprojet.PrivateUserInfoActivity
 import fr.isen.knackisen.androidprojet.data.model.UserInfo
 import fr.isen.knackisen.androidprojet.databinding.FragmentRightBinding
@@ -63,6 +64,12 @@ class RightFragment : Fragment() {
                 .setAction(Intent.ACTION_GET_CONTENT)
             startActivityForResult(Intent.createChooser(intent,"Choose a file"), 100)
 
+        }
+
+        binding.logoutCreatpost.setOnClickListener {
+            Firebase.auth.signOut()
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
         }
 
         return binding.root
