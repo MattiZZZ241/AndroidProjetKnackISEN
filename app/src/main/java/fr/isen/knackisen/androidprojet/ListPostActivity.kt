@@ -15,26 +15,21 @@ import fr.isen.knackisen.androidprojet.databinding.ActivityListPostBinding
 
 class ListPostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListPostBinding
-    private lateinit var postContaiener: List<Post>
-
-
-
-
-
+    private lateinit var postContainer: List<Post>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityListPostBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-         readDataFromFirebase()
+        readDataFromFirebase()
     }
 
     private fun readDataFromFirebase() {
         val database = Firebase.database
         database.reference.child("posts").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
-                postContaiener = listOf()
+                postContainer = listOf()
                 for (snapshot in task.result!!.children) {
 
                     val id = snapshot.child("id").value.toString()
@@ -57,7 +52,6 @@ class ListPostActivity : AppCompatActivity() {
                         commentList.add(Comment(commentId, commentContent, commentUser))
                     }*/
 
-
                     val like = snapshot.child("reactions").child("like").value.toString().toInt()
 
                     val reactions = Reactions(like, false, commentList)
@@ -65,12 +59,9 @@ class ListPostActivity : AppCompatActivity() {
 
                     val post = Post(id, content, user, reactions)
 
-
-                    postContaiener += post
-
-
+                    postContainer += post
                 }
-                Log.i("TAG", "Value is: ${postContaiener}")
+                Log.i("TAG", "Value is: $postContainer")
                 recyclerViewRefresh()
 
             } else {
@@ -92,13 +83,11 @@ class ListPostActivity : AppCompatActivity() {
             }
 
         val adapter = recyclerView.adapter as ListPostAdapter
-        adapter.refreshList(postContaiener)
-
+        adapter.refreshList(postContainer)
     }
 
     override fun onDestroy() {
-            super.onDestroy()
-            Log.d("onDestroy", "$this onDestroy")
-        }
-
+        super.onDestroy()
+        Log.d("onDestroy", "$this onDestroy")
+    }
 }
