@@ -26,6 +26,7 @@ class CommentsActivity : AppCompatActivity() {
     private lateinit var database: FirebaseDatabase
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var listComment: List<Comment>
+    private lateinit var parentPost: Post
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +35,8 @@ class CommentsActivity : AppCompatActivity() {
         listComment = listOf()
         database = Firebase.database
 
-
         var postString = intent.getStringExtra("post")
+        parentPost = Gson().fromJson(postString, Post::class.java)
 
         if ( postString.isNullOrEmpty()) {
             finish()
@@ -47,16 +48,7 @@ class CommentsActivity : AppCompatActivity() {
         binding.contentPostCommentView.text = parentPost.content
         binding.likesCount.text = parentPost.reactions.like.toString()
 
-
-        
-
-
-
-
-
-
-
-        subToComments()
+        subToComments(parentPost)
 
 
         var newComment = fun () {
@@ -77,8 +69,10 @@ class CommentsActivity : AppCompatActivity() {
         binding.commentButton.setOnClickListener { newComment() }
     }
 
-    private fun subToComments(){
-        database.reference.child("comments").get().addOnCompleteListener() { task ->
+    private fun subToComments(post: Post){
+        val ref = database.getReference("posts").child(post.id).child("reactions").child("comments")
+        Log.d(TAG, "subToComments: $ref")
+        ref.get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 listComment = listOf()
                 for (snapshot in task.result!!.children) {
@@ -100,7 +94,7 @@ class CommentsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        subToComments()
+        subToComments(parentPost)
     }
 
 
