@@ -28,6 +28,16 @@ class AddCommentActivity : AppCompatActivity() {
         var database = Firebase.database
         listComment = listOf()
 
+
+        var parentIdString = intent.getStringExtra("id")
+        if ( parentIdString.isNullOrEmpty()) {
+            parentIdString = "0"
+        }
+        // parentIdString is either "-NN677AnJFPI7T5JRaHo" or "[-NN2N0s4ko5TmNd9rLP, -NN677AnJFPI7T5JRaHo]"
+        // split it to a list of strings to get "-NN677AnJFPI7T5JRaHo" or ["-NN2N0s4ko5TmNd9rLP", "-NN677AnJFPI7T5JRaHo"]
+        var parentID:List<String> = parentIdString.split(",").map { it.trim() }
+
+
         database.reference.child("comments").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 listComment = listOf()
@@ -54,9 +64,9 @@ class AddCommentActivity : AppCompatActivity() {
 
             var commentDatabase = database.getReference("comments")
             var key = commentDatabase.push().key
-
-            val comment = key?.let { it1 -> Comment(it1, commentBody, user) }
-
+            var idComment = (parentID + key).toString()
+            val comment = Comment(idComment, commentBody, user)
+            Log.d("comment", comment.toString())
             commentDatabase.child(key!!).setValue(comment)
 
 
