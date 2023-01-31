@@ -40,7 +40,7 @@ class CreatePostActivity : AppCompatActivity() {
 
     private fun prepareData(currentUser : User, reactions : Reactions) : Post{
         val content = binding.inputPost.text.toString()
-        return Post(1, content, currentUser, reactions)
+        return Post("1", content, currentUser, reactions)
     }
 
     private fun writePost(post : Post){
