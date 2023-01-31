@@ -26,13 +26,23 @@
 
         <Button
             android:id="@+id/likeButton"
-            android:layout_width="7dp"
+            android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:paddingLeft="0dp"
             android:paddingTop="0dp"
             android:paddingRight="0dp"
             android:text="Like" />
+
+        <Button
+            android:id="@+id/commentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:paddingRight="0dp"
+            android:text="Comment" />
 
         <Space
             android:layout_width="wrap_content"

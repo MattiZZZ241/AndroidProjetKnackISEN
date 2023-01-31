@@ -80,12 +80,19 @@ private lateinit var listComment: List<Comment>
             startActivity(i)
         }
        // var commentList = listOf(Comment("test","This is the message", User(1, "Serg")),Comment("id","Another message", User(2, "L'autre")))
-        commentsAdapter = CommentsAdapter(listComment)
+
+        var toCreateComment = fun (ids: String): Unit {
+            val i = Intent(this@CommentsActivity, AddCommentActivity::class.java)
+            i.putExtra("id", ids)
+            startActivity(i)
+        }
+        commentsAdapter = CommentsAdapter(listComment, toCreateComment)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.newComment.setOnClickListener { newComment() }
 
     }
+
 
     private fun subToComments(){
         database.reference.child("comments").get().addOnCompleteListener() { task ->
