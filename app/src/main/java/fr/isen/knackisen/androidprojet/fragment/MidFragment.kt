@@ -26,10 +26,9 @@ class MidFragment : Fragment() {
     ): View {
         _binding = FragmentMidBinding.inflate(inflater, container, false)
 
-
         val database = Firebase.database.getReference("posts")
 
-        val currentUser = User(1, "Example User")
+        val currentUser = User("1", "Example User")
         val comments: List<Comment> = listOf(Comment("1", "Example Comment", currentUser))
         val reactions = Reactions(0, false, comments)
 
