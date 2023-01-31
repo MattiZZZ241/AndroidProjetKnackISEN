@@ -6,7 +6,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import fr.isen.knackisen.androidprojet.adapter.ViewPagerAdapter
 import fr.isen.knackisen.androidprojet.databinding.ActivityMainBinding
 
-val viewsArray = arrayOf("Right", "Mid", "Left")
+val viewsArray = arrayOf("Left", "Mid", "Right")
 
 class MainActivity : AppCompatActivity() {
 
