@@ -13,6 +13,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import fr.isen.knackisen.androidprojet.LoginActivity
 import fr.isen.knackisen.androidprojet.PrivateUserInfoActivity
 import fr.isen.knackisen.androidprojet.data.model.UserInfo
 import fr.isen.knackisen.androidprojet.databinding.FragmentRightBinding
@@ -33,8 +34,6 @@ class RightFragment : Fragment() {
         database= Firebase.database
         user = Firebase.auth.currentUser!!
 
-        makeInvisible()
-
         Log.d("UID CHANGED", user.uid)
         UID = user.uid
 
@@ -49,7 +48,6 @@ class RightFragment : Fragment() {
                 if (binding.userInfoName.text.toString() == "null") {
                     binding.userInfoName.setText("")
                 }
-                makeVisible()
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
             }
@@ -59,19 +57,18 @@ class RightFragment : Fragment() {
             updateData(UserInfo(binding.userInfoName.text.toString(), binding.userInfoAge.text.toString().toInt()))
         }
 
-        binding.PrivateInfos.setOnClickListener {
+        binding.privateInfos.setOnClickListener {
             val intent = Intent(activity, PrivateUserInfoActivity::class.java)
             startActivity(intent)
         }
 
+        binding.logoutCreatpost.setOnClickListener {
+            Firebase.auth.signOut()
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
         return binding.root
-    }
-
-    private fun addData(userInfo: UserInfo){
-        val pushDB = database.getReference("userinfos").child(UID)
-        userInfo.uid=UID
-        pushDB.setValue(userInfo)
-
     }
 
     private fun updateData(userInfo: UserInfo){
@@ -80,25 +77,5 @@ class RightFragment : Fragment() {
         userInfo.uid=UID
 
         pushDB.setValue(userInfo)
-    }
-
-    private fun makeVisible(){
-        binding.button.visibility = View.VISIBLE
-        binding.userInfoAge.visibility = View.VISIBLE
-        binding.userInfoName.visibility = View.VISIBLE
-        binding.infoAge.visibility = View.VISIBLE
-        binding.infoName.visibility = View.VISIBLE
-        binding.PrivateInfos.visibility = View.VISIBLE
-        binding.progressBar.visibility = View.GONE
-    }
-
-    private fun makeInvisible(){
-        binding.button.visibility = View.GONE
-        binding.userInfoAge.visibility = View.GONE
-        binding.userInfoName.visibility = View.GONE
-        binding.infoAge.visibility = View.GONE
-        binding.infoName.visibility = View.GONE
-        binding.PrivateInfos.visibility = View.GONE
-        binding.progressBar.visibility = View.VISIBLE
     }
 }
