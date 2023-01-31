@@ -105,7 +105,7 @@ class LeftFragment : Fragment() {
             Log.d("post", post.toString())
 
             val intent = Intent(activity, CommentsActivity::class.java)
-            intent.putExtra("Items", Gson().toJson(post))
+            intent.putExtra("post", Gson().toJson(post))
             startActivity(intent)
 
         }
