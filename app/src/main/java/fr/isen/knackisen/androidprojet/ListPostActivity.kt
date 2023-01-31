@@ -39,9 +39,10 @@ class ListPostActivity : AppCompatActivity() {
 
                     val id = snapshot.child("id").value.toString()
                     val content = snapshot.child("content").value.toString()
+                    Log.d("VALUE", content)
 
                     val name = snapshot.child("user").child("name").value.toString()
-                    val userId = snapshot.child("user").child("id").value.toString().toInt()
+                    val userId = snapshot.child("user").child("id").value.toString()
                     val user = User(userId, name)
 
                     // get comment list
@@ -56,11 +57,11 @@ class ListPostActivity : AppCompatActivity() {
 
                         commentList.add(Comment(commentId, commentContent, commentUser))
                     }*/
+                    Log.d("like", snapshot.child("reactions").child("like").value.toString())
 
+//                    val like = snapshot.child("reactions").child("like").value.toString().toInt()
 
-                    val like = snapshot.child("reactions").child("like").value.toString().toInt()
-
-                    val reactions = Reactions(like, false, commentList)
+                    val reactions = Reactions(2, false, commentList)
                     Log.d("reactions", commentList.toString())
 
                     val post = Post(id, content, user, reactions)

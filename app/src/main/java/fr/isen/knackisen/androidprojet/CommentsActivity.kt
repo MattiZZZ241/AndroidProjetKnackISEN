@@ -102,7 +102,7 @@ private lateinit var listComment: List<Comment>
                     var id = snapshot.child("id").value.toString()
                     var content = snapshot.child("content").value.toString()
                     var name = snapshot.child("user").child("name").value.toString()
-                    var userId = snapshot.child("user").child("id").value.toString().toInt()
+                    var userId = snapshot.child("user").child("id").value.toString()
                     var user = User(userId, name)
                     var comment = Comment(id, content, user)
                     listComment += comment
