@@ -117,6 +117,7 @@ class LeftFragment : Fragment() {
         adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike)
         recyclerView.adapter = adapter
 
+
         adapter.refreshList(postContainer)
     }
 
