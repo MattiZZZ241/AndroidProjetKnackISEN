@@ -38,7 +38,7 @@ class FormInfoUserActivity : AppCompatActivity() {
 
         binding.buttonFIUA.setOnClickListener {
             val radioButton = binding.radioGroupFUIA.findViewById<RadioButton>(binding.radioGroupFUIA.checkedRadioButtonId)
-            updateData(UserInfo(binding.userInfoNameFIUA.text.toString(), binding.userInfoAgeFIUA.text.toString().toInt(),"","",radioButton.text.toString()))
+            updateData(UserInfo(binding.userInfoNameFIUA.text.toString(), binding.userInfoAgeFIUA.text.toString().toInt(),"",radioButton.text.toString()))
         }
 
     }
