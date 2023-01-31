@@ -1,5 +1,6 @@
 package fr.isen.knackisen.androidprojet.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,20 +35,23 @@ class CommentsAdapter (var list: List<Comment>, val toCreateComment: (String)-> 
         holder.content.text = list[position].content
         holder.likeCount.text = "0"
         holder.likeButton.setOnClickListener {
-            reactionsManager.clickLike (toggleLikeText(reactions, holder.likeButton))
+            var refresh = fun (reactions: Reactions, button: Button, likes: TextView) {
+                if (reactions.userLiked) {
+                    //text button
+                    button.text = "Unlike"
+                } else {
+                    button.text = "Like"
+                }
+                likes.text = reactions.like.toString()
+
+            }
+            reactionsManager.clickLike (refresh, holder.likeButton, holder.likeCount)
+
         }
         holder.commentButton.setOnClickListener {
             toCreateComment(list[position].id)
         }
 
-    }
-    private fun toggleLikeText(reactions: Reactions, button: Button) {
-        if (reactions.userLiked) {
-            //text button
-            button.text = "Unlike"
-        } else {
-            button.text = "Like"
-        }
     }
 
 
