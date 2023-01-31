@@ -17,6 +17,9 @@ import fr.isen.knackisen.androidprojet.databinding.ActivityListPostBinding
 class ListPostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListPostBinding
     private lateinit var postContaiener: List<Post>
+    private val commentList = mutableListOf<Comment>()
+
+
 
 
 
@@ -34,6 +37,8 @@ class ListPostActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 postContaiener = listOf()
                 for (snapshot in task.result!!.children) {
+                    val commentList = mutableListOf<Comment>()
+
                     val id = snapshot.child("id").value.toString()
                     val content = snapshot.child("content").value.toString()
 
@@ -41,16 +46,30 @@ class ListPostActivity : AppCompatActivity() {
                     val userId = snapshot.child("user").child("id").value.toString().toInt()
                     val user = User(userId, name)
 
-                    val comment = Comment(id,content, user)
+                    for (comment in snapshot.child("comment").children) {
+                        val commentId = comment.child("id").value.toString()
+                        val commentContent = comment.child("content").value.toString()
+
+                        val commentName = comment.child("user").child("name").value.toString()
+                        val commentUserId = comment.child("user").child("id").value.toString().toInt()
+                        val commentUser = User(commentUserId, commentName)
+
+                        val comment = Comment(commentId, commentContent, commentUser)
+                        commentList.add(comment)
+                    }
+
 
                     val like = snapshot.child("reactions").child("like").value.toString().toInt()
 
-                    val reactions = Reactions(like, listOf())
+                    val reactions = Reactions(like, commentList)
+                    Log.d("reactions", commentList.toString())
 
                     val post = Post(id, content, user, reactions)
 
 
                     postContaiener += post
+
+
                 }
                 Log.i("TAG", "Value is: ${postContaiener}")
                 recyclerViewRefresh()

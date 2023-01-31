@@ -17,6 +17,8 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         val nameView: TextView = itemView.findViewById(R.id.nameUserPostView)
         val imageView: ImageView = itemView.findViewById(R.id.imagePostView)
         val contentView: TextView = itemView.findViewById(R.id.pseudo2PostView)
+        val likeView: TextView = itemView.findViewById(R.id.likePostView)
+        val commentView: TextView = itemView.findViewById(R.id.commentPostView)
     }
     // create new views
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,12 +35,17 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         val itemsViewModel = list[position]
         holder.nameView.text = itemsViewModel.user.name
         holder.contentView.text = itemsViewModel.content
+        holder.likeView.text = itemsViewModel.reactions.like.toString()
+
+        // compter le nombre de commentaires dans la liste de commentaires de la publication (itemsViewModel.reactions.comment)
+
+        holder.commentView.text = itemsViewModel.reactions.comment.size.toString()
 
 
 
-       /* if (itemsViewModel.user.image != "") {
-            Picasso.get().load(itemsViewModel.user.image).into(holder.imageView)
-        }*/
+        /* if (itemsViewModel.user.image != "") {
+             Picasso.get().load(itemsViewModel.user.image).into(holder.imageView)
+         }*/
 
         holder.itemView.setOnClickListener{
             OnItemClickListener(itemsViewModel)
