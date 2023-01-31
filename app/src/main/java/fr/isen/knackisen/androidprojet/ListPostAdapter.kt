@@ -7,11 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import fr.isen.knackisen.androidprojet.R
-import fr.isen.knackisen.androidprojet.ReactionsManager
 import fr.isen.knackisen.androidprojet.data.model.Post
-import fr.isen.knackisen.androidprojet.data.model.Reactions
 
-class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit, val toCreateComment: (Post) -> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
+class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit, val toCreateComment: (Post) -> Unit, val likeAction: (Post) -> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
     // adapter conteneur
     // RecyclerView contenu
     // Holds the views for adding it to text
@@ -35,35 +33,26 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
     // binds the list items to a view
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        var reactionsManager = ReactionsManager()
 
-        val itemsViewModel = list[position]
-        holder.nameView.text = itemsViewModel.user.name
-        holder.contentView.text = itemsViewModel.content
-        holder.likeCount.text = "0"
-        holder.likeButton.setOnClickListener {
-            var refresh = fun (reactions: Reactions, button: Button, likes: TextView) {
-                if (reactions.userLiked) {
-                    //text button
-                    button.text = "Unlike"
-                } else {
-                    button.text = "Like"
-                }
-                likes.text = reactions.like.toString()
-            }
-            reactionsManager.clickLike (refresh, holder.likeButton, holder.likeCount)
+        val post = list[position]
+        holder.nameView.text = post.user.name
+        holder.contentView.text = post.content
+        holder.likeCount.text = post.reactions.like.toString()
+        holder.likeButton.text = if (post.reactions.userLiked) "Unlike" else "Like"
+        holder.likeButton.setOnClickListener() {
+
+            likeAction(post)
+
+
+            refreshList()
         }
 
         holder.commentButton.setOnClickListener {
             toCreateComment(list[position])
         }
 
-        /* if (itemsViewModel.user.image != "") {
-             Picasso.get().load(itemsViewModel.user.image).into(holder.imageView)
-         }*/
-
         holder.itemView.setOnClickListener{
-            OnItemClickListener(itemsViewModel)
+            OnItemClickListener(post)
         }
     }
     @SuppressLint("NotifyDataSetChanged")
@@ -71,8 +60,14 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         list = newList
         notifyDataSetChanged()
     }
+
+
     // return the number of the items in the list
     override fun getItemCount(): Int = list.size
+
+    private fun refreshList(){
+        notifyDataSetChanged()
+    }
 
 }
 
