@@ -6,7 +6,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import fr.isen.knackisen.androidprojet.adapter.ViewPagerAdapter
 import fr.isen.knackisen.androidprojet.databinding.ActivityMainBinding
 
-val viewsArray = arrayOf("Left", "Mid", "Right")
+val viewsArray = arrayOf("All Posts", "Write a Post", "Profile")
 
 class MainActivity : AppCompatActivity() {
 
