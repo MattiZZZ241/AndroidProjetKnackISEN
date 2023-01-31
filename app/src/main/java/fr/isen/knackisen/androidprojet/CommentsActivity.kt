@@ -49,7 +49,6 @@ private lateinit var listComment: List<Comment>
         binding.newComment.setOnClickListener { newComment() }
     }
 
-
     private fun subToComments(){
         database.reference.child("comments").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -64,7 +63,6 @@ private lateinit var listComment: List<Comment>
                     listComment += comment
                 }
                 commentsAdapter.updateList(listComment)
-
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
             }
