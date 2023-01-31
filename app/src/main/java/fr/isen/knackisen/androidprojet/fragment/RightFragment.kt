@@ -52,7 +52,7 @@ class RightFragment : Fragment() {
             updateData(UserInfo(binding.userInfoName.text.toString(), binding.userInfoAge.text.toString().toInt()))
         }
 
-        binding.PrivateInfos.setOnClickListener {
+        binding.privateInfos.setOnClickListener {
             val intent = Intent(activity, PrivateUserInfoActivity::class.java)
             startActivity(intent)
         }
