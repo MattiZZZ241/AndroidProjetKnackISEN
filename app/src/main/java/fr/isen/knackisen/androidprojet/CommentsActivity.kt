@@ -57,49 +57,6 @@ class CommentsActivity : AppCompatActivity() {
 
 
         subToComments()
-        /*database.reference.child("comments").get().addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                listComment = listOf()
-                for (snapshot in task.result!!.children) {
-                    var id = snapshot.child("id").value.toString()
-                    var content = snapshot.child("content").value.toString()
-                    var name = snapshot.child("user").child("name").value.toString()
-                    var userId = snapshot.child("user").child("id").value.toString().toInt()
-                    var user = User(userId, name)
-                    var comment = Comment(id, content, user)
-                    listComment += comment
-                }
-                Log.i("TAG", "Value is: ${listComment}")
-                commentsAdapter.updateList(listComment)
-
-            } else {
-                Log.d("VALUE", task.exception?.message.toString())
-            }
-        }*/
-
-     /*   database.getReference("comments").addListenerForSingleValueEvent(object : ValueEventListener {
-
-            override fun onDataChange(snapshot: DataSnapshot) {
-                listComment = listOf()
-                Log.i("TAG", "Value is: ${snapshot.value}")
-                for (child in snapshot.children) {
-                    var id = child.child("id").value.toString()
-                    var content = child.child("content").value.toString()
-                    var name = child.child("user").child("name").value.toString()
-                    var userId = child.child("user").child("id").value.toString().toInt()
-                    var user = User(userId, name)
-                    var comment = Comment(id, content, user)
-                    listComment += comment
-                }
-                Log.i("TAG", "Value is: ${listComment}")
-                commentsAdapter.updateList(listComment)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException())
-            }
-        })*/
 
 
         var newComment = fun () {
@@ -134,7 +91,6 @@ class CommentsActivity : AppCompatActivity() {
                     var comment = Comment(id, content, user)
                     listComment += comment
                 }
-                Log.i("TAG", "Value is: ${listComment}")
                 commentsAdapter.updateList(listComment)
 
             } else {

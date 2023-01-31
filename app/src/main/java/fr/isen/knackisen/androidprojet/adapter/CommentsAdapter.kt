@@ -1,5 +1,6 @@
 package fr.isen.knackisen.androidprojet.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,10 +43,8 @@ class CommentsAdapter (var list: List<Comment>, val toCreateComment: (String)-> 
                     button.text = "Like"
                 }
                 likes.text = reactions.like.toString()
-
             }
             reactionsManager.clickLike (refresh, holder.likeButton, holder.likeCount)
-
         }
         holder.commentButton.setOnClickListener {
             toCreateComment(list[position].id)

@@ -24,6 +24,7 @@ class LeftFragment : Fragment() {
     private var _binding: FragmentLeftBinding? = null
     private val binding get() = _binding!!
     private lateinit var postContainer: List<Post>
+    private lateinit var adapter: ListPostAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -45,11 +46,12 @@ class LeftFragment : Fragment() {
 
                     val id = snapshot.child("id").value.toString()
                     val content = snapshot.child("content").value.toString()
-                    Log.d("VALUE", content)
 
                     val name = snapshot.child("user").child("name").value.toString()
                     val userId = snapshot.child("user").child("id").value.toString()
                     val user = User(userId, name)
+                    var likes = snapshot.child("reactions").child("like").value
+
 
                     // get comment list
                     val commentList = mutableListOf<Comment>()
@@ -63,18 +65,16 @@ class LeftFragment : Fragment() {
 
                         commentList.add(Comment(commentId, commentContent, commentUser))
                     }
-                    Log.d("like", snapshot.child("reactions").child("like").value.toString())
+                    if (likes == null) {
+                        likes = 0
+                    }
+                    val reactions = Reactions(likes.toString().toInt(), false, commentList)
 
-//                    val like = snapshot.child("reactions").child("like").value.toString().toInt()
-
-                    val reactions = Reactions(2, false, commentList)
-                    Log.d("reactions", commentList.toString())
 
                     val post = Post(id, content, user, reactions)
 
                     postContainer += post
                 }
-                Log.i("TAG", "Value is: $postContainer")
                 recyclerViewRefresh()
 
             } else {
@@ -87,32 +87,37 @@ class LeftFragment : Fragment() {
         val recyclerView = binding.recyclerview
         recyclerView.layoutManager = LinearLayoutManager(activity)
 
-        /*recyclerView.adapter =
-            ListPostAdapter(arrayListOf()) { post ->
-
-                val intent = Intent(this, DetailsDishesActivity::class.java)
-                intent.putExtra("Items", cartItem)
-                startActivity(intent)
-            }*/
-
         val toCreateComment = fun (post: Post): Unit {
             val i = Intent(activity, AddCommentActivity::class.java)
-
             i.putExtra("post", Gson().toJson(post))
             startActivity(i)
         }
         val onClick = fun (post:Post): Unit {
-            Log.d("post", post.toString())
 
             val intent = Intent(activity, CommentsActivity::class.java)
             intent.putExtra("post", Gson().toJson(post))
             startActivity(intent)
 
         }
-        recyclerView.adapter =
-            ListPostAdapter(arrayListOf(), onClick, toCreateComment)
 
-        val adapter = recyclerView.adapter as ListPostAdapter
+        val onLike = fun (post: Post): Unit {
+            val moreLess: Int = if (post.reactions.userLiked) -1 else 1
+
+            val database = Firebase.database
+            val postRef = database.getReference("posts").child(post.id)
+            postRef.child("reactions").child("like").setValue(post.reactions.like + moreLess)
+           // readDataFromFirebase()
+
+            post.reactions.userLiked = !post.reactions.userLiked
+            post.reactions.like += moreLess
+
+            adapter.refreshList(postContainer)
+           // recyclerViewRefresh()
+        }
+
+        adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike)
+        recyclerView.adapter = adapter
+
         adapter.refreshList(postContainer)
     }
 
