@@ -17,7 +17,7 @@ import fr.isen.knackisen.androidprojet.databinding.ActivityListPostBinding
 class ListPostActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListPostBinding
     private lateinit var postContaiener: List<Post>
-    private val commentList = mutableListOf<Comment>()
+
 
 
 
@@ -37,7 +37,6 @@ class ListPostActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 postContaiener = listOf()
                 for (snapshot in task.result!!.children) {
-                    val commentList = mutableListOf<Comment>()
 
                     val id = snapshot.child("id").value.toString()
                     val content = snapshot.child("content").value.toString()
@@ -46,7 +45,9 @@ class ListPostActivity : AppCompatActivity() {
                     val userId = snapshot.child("user").child("id").value.toString().toInt()
                     val user = User(userId, name)
 
-                    for (comment in snapshot.child("comment").children) {
+                    // get comment list
+                  val commentList = mutableListOf<Comment>()
+                    /*for (comment in snapshot.child("comment").children) {
                         val commentId = comment.child("id").value.toString()
                         val commentContent = comment.child("content").value.toString()
 
@@ -54,9 +55,8 @@ class ListPostActivity : AppCompatActivity() {
                         val commentUserId = comment.child("user").child("id").value.toString().toInt()
                         val commentUser = User(commentUserId, commentName)
 
-                        val comment = Comment(commentId, commentContent, commentUser)
-                        commentList.add(comment)
-                    }
+                        commentList.add(Comment(commentId, commentContent, commentUser))
+                    }*/
 
 
                     val like = snapshot.child("reactions").child("like").value.toString().toInt()
