@@ -26,13 +26,19 @@ class MidFragment : Fragment() {
     ): View {
         _binding = FragmentMidBinding.inflate(inflater, container, false)
 
+
+        val database = Firebase.database.getReference("posts")
+
         val currentUser = User(1, "Example User")
-        val comments: List<Comment> = listOf()
+        val comments: List<Comment> = listOf(Comment("1", "Example Comment", currentUser))
         val reactions = Reactions(0, false, comments)
 
+        val key = database.push().key
+        
         binding.buttonPost.setOnClickListener {
             val post = prepareData(currentUser, reactions)
-            writePost(post)
+            database.child(key!!).setValue(post)
+            //writePost(post)
         }
 
         binding.logoutCreatpost.setOnClickListener {
@@ -46,10 +52,5 @@ class MidFragment : Fragment() {
     private fun prepareData(currentUser: User, reactions: Reactions): Post {
         val content = binding.inputPost.text.toString()
         return Post("1", content, currentUser, reactions)
-    }
-
-    private fun writePost(post: Post) {
-        val database = Firebase.database.getReference("posts")
-        database.setValue(post)
     }
 }
