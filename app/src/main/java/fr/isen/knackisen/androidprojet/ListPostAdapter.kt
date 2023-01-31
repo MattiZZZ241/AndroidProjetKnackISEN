@@ -1,4 +1,5 @@
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +18,7 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         // val imageView: ImageView = itemView.findViewById(R.id.imageview)
         val nameView: TextView = itemView.findViewById(R.id.nameUserPostView)
         val imageView: ImageView = itemView.findViewById(R.id.imagePostView)
-        val contentView: TextView = itemView.findViewById(R.id.pseudo2PostView)
+        val contentView: TextView = itemView.findViewById(R.id.contentPostView)
         val likeButton: Button = itemView.findViewById(R.id.likeButton)
         val likeCount: TextView = itemView.findViewById(R.id.likesCount)
         val commentButton: Button = itemView.findViewById(R.id.commentButton)
@@ -44,7 +45,6 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
             likeAction(post)
 
 
-            refreshList()
         }
 
         holder.commentButton.setOnClickListener {
@@ -64,10 +64,6 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
 
     // return the number of the items in the list
     override fun getItemCount(): Int = list.size
-
-    private fun refreshList(){
-        notifyDataSetChanged()
-    }
 
 }
 

@@ -70,7 +70,7 @@ class LeftFragment : Fragment() {
                     }
                     val reactions = Reactions(likes.toString().toInt(), false, commentList)
 
-
+                    Log.d("TMAIAIAIAIAIAIAIAG", "readDataFromFirebase: $id $content $user $reactions")
                     val post = Post(id, content, user, reactions)
 
                     postContainer += post
