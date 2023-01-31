@@ -2,6 +2,7 @@ package fr.isen.knackisen.androidprojet.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,10 +34,13 @@ class MidFragment : Fragment() {
         val reactions = Reactions(0, false, comments)
 
         val key = database.push().key
-        
+        if(key.isNullOrEmpty() ) {
+            Log.e("ERROR", "Key is null or empty")
+            return binding.root
+        }
         binding.buttonPost.setOnClickListener {
-            val post = prepareData(currentUser, reactions)
-            database.child(key!!).setValue(post)
+            val post = prepareData(currentUser, key, reactions)
+            database.child(key).setValue(post)
             //writePost(post)
         }
 
@@ -48,8 +52,8 @@ class MidFragment : Fragment() {
         return binding.root
     }
 
-    private fun prepareData(currentUser: User, reactions: Reactions): Post {
+    private fun prepareData(currentUser: User, key:String, reactions: Reactions): Post {
         val content = binding.inputPost.text.toString()
-        return Post("1", content, currentUser, reactions)
+        return Post(key, content, currentUser, reactions)
     }
 }
