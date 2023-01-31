@@ -4,15 +4,19 @@ import android.content.ContentValues.TAG
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.FirebaseError
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
 import fr.isen.knackisen.androidprojet.adapter.CommentsAdapter
 import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
+import fr.isen.knackisen.androidprojet.data.model.Reactions
 import fr.isen.knackisen.androidprojet.data.model.User
 import fr.isen.knackisen.androidprojet.databinding.ActivityCommentsBinding
 
@@ -21,7 +25,7 @@ class CommentsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCommentsBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var commentsAdapter: CommentsAdapter
-private lateinit var listComment: List<Comment>
+    private lateinit var listComment: List<Comment>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,6 +33,29 @@ private lateinit var listComment: List<Comment>
         setContentView(binding.root)
         listComment = listOf()
         database = Firebase.database
+
+
+        var postString = intent.getStringExtra("post")
+
+        if ( postString.isNullOrEmpty()) {
+            finish()
+        }
+        var parentPost: Post = Gson().fromJson(postString, Post::class.java)
+        var reactionsManager = ReactionsManager()
+
+        binding.nameUserPostCommentView.text = parentPost.user.name
+        binding.contentPostCommentView.text = parentPost.content
+        binding.likesCount.text = parentPost.reactions.like.toString()
+
+
+        
+
+
+
+
+
+
+
         subToComments()
         /*database.reference.child("comments").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -77,6 +104,7 @@ private lateinit var listComment: List<Comment>
 
         var newComment = fun () {
             val i = Intent(this@CommentsActivity, AddCommentActivity::class.java)
+            i.putExtra("post", postString)
             startActivity(i)
         }
        // var commentList = listOf(Comment("test","This is the message", User(1, "Serg")),Comment("id","Another message", User(2, "L'autre")))
@@ -89,7 +117,7 @@ private lateinit var listComment: List<Comment>
         commentsAdapter = CommentsAdapter(listComment, toCreateComment)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
-        binding.newComment.setOnClickListener { newComment() }
+        binding.commentButton.setOnClickListener { newComment() }
     }
 
 
