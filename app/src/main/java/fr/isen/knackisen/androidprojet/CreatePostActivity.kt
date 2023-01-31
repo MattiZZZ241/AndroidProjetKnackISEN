@@ -1,7 +1,9 @@
 package fr.isen.knackisen.androidprojet
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fr.isen.knackisen.androidprojet.data.model.Comment
@@ -27,6 +29,12 @@ class CreatePostActivity : AppCompatActivity() {
         binding.buttonPost.setOnClickListener {
             val post = prepareData(currentUser, reactions)
             writePost(post)
+        }
+
+        binding.logoutCreatpost.setOnClickListener{
+            Firebase.auth.signOut()
+            val intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
         }
     }
 

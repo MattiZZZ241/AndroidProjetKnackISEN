@@ -1,82 +1,119 @@
 package fr.isen.knackisen.androidprojet
 
-import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.FirebaseError
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import fr.isen.knackisen.androidprojet.adapter.CommentsAdapter
 import fr.isen.knackisen.androidprojet.data.model.Comment
+import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.User
 import fr.isen.knackisen.androidprojet.databinding.ActivityCommentsBinding
-import fr.isen.knackisen.androidprojet.databinding.ActivityLoginBinding
+
 
 class CommentsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCommentsBinding
-    private lateinit var database: DatabaseReference
+    private lateinit var database: FirebaseDatabase
     private lateinit var commentsAdapter: CommentsAdapter
+private lateinit var listComment: List<Comment>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCommentsBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        listComment = listOf()
+        database = Firebase.database
+        subToComments()
+        /*database.reference.child("comments").get().addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                listComment = listOf()
+                for (snapshot in task.result!!.children) {
+                    var id = snapshot.child("id").value.toString()
+                    var content = snapshot.child("content").value.toString()
+                    var name = snapshot.child("user").child("name").value.toString()
+                    var userId = snapshot.child("user").child("id").value.toString().toInt()
+                    var user = User(userId, name)
+                    var comment = Comment(id, content, user)
+                    listComment += comment
+                }
+                Log.i("TAG", "Value is: ${listComment}")
+                commentsAdapter.updateList(listComment)
 
-        database = Firebase.database.getReference("comments")
+            } else {
+                Log.d("VALUE", task.exception?.message.toString())
+            }
+        }*/
 
-        database.addValueEventListener(object: ValueEventListener {
+     /*   database.getReference("comments").addListenerForSingleValueEvent(object : ValueEventListener {
 
             override fun onDataChange(snapshot: DataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-               /* var listString: String = snapshot.getValue().toString()
-                listString.split("Comment").map {
-                    This is it
-                    * {-NN1qEMr1Z_MuSrl8V_Q={id=-NN1qEMr1Z_MuSrl8V_Q, user={name=name, id=1}, content=ddik}, -NN1rqloI9VJf0fxtIwq={id=-NN1rqloI9VJf0fxtIwq, user={name=name, id=1}, content=fht}, -NN1opE3W5ylgyMdTI7X={user={name=name, id=1}, content=fiju}, -NN1o5vqFTxpDkwB5EJY={user={name=name, id=1}, content=gguui}, -NN1sWmMJGzI-iABwXxn={id=-NN1sWmMJGzI-iABwXxn, user={name=name, id=1}, content=dhhn}, user={name=name, id=1}, content=mhhhhtncfiu}
-
-                    var id = it.substringAfter("id=").substringBefore(", user")
-                    var content = it.substringAfter("content=").substringBefore("}")
-                    var name = it.substringAfter("name=").substringBefore(", id")
-                    var user = User(1, name)
+                listComment = listOf()
+                Log.i("TAG", "Value is: ${snapshot.value}")
+                for (child in snapshot.children) {
+                    var id = child.child("id").value.toString()
+                    var content = child.child("content").value.toString()
+                    var name = child.child("user").child("name").value.toString()
+                    var userId = child.child("user").child("id").value.toString().toInt()
+                    var user = User(userId, name)
                     var comment = Comment(id, content, user)
-                    Log.i("TAG", "Value is: ${comment}")
-                    *
-                    // Fill a variable with the list of comments
-
+                    listComment += comment
                 }
-                var listList: List<Comment> = listOf()
-                commentsAdapter.updateList(listList)
-                Log.i("TAG", "Value is: ${snapshot.getValue()}")
-
-                */
+                Log.i("TAG", "Value is: ${listComment}")
+                commentsAdapter.updateList(listComment)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.w(ContentValues.TAG, "Failed to read value.", error.toException())
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException())
             }
-        })
+        })*/
+
 
         var newComment = fun () {
             val i = Intent(this@CommentsActivity, AddCommentActivity::class.java)
             startActivity(i)
         }
-        var commentList = listOf(Comment("test","This is the message", User(1, "Serg")),Comment("id","Another message", User(2, "L'autre")))
-        commentsAdapter = CommentsAdapter(commentList)
+       // var commentList = listOf(Comment("test","This is the message", User(1, "Serg")),Comment("id","Another message", User(2, "L'autre")))
+        commentsAdapter = CommentsAdapter(listComment)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.newComment.setOnClickListener { newComment() }
 
     }
 
+    private fun subToComments(){
+        database.reference.child("comments").get().addOnCompleteListener() { task ->
+            if (task.isSuccessful) {
+                listComment = listOf()
+                for (snapshot in task.result!!.children) {
+                    var id = snapshot.child("id").value.toString()
+                    var content = snapshot.child("content").value.toString()
+                    var name = snapshot.child("user").child("name").value.toString()
+                    var userId = snapshot.child("user").child("id").value.toString().toInt()
+                    var user = User(userId, name)
+                    var comment = Comment(id, content, user)
+                    listComment += comment
+                }
+                Log.i("TAG", "Value is: ${listComment}")
+                commentsAdapter.updateList(listComment)
+
+            } else {
+                Log.d("VALUE", task.exception?.message.toString())
+            }
+        }
+    }
 
 
+    override fun onResume() {
+        super.onResume()
+        subToComments()
+    }
 
 
 }
