@@ -108,9 +108,6 @@ class LeftFragment : Fragment() {
 
         val onLike = fun (post: Post, button: Button, count:TextView): Unit {
             reactionsManager.clickLike(post, button, count)
-
-            adapter.refreshList(postContainer)
-           // recyclerViewRefresh()
         }
 
         val checkLike = fun (post: Post, button: Button, count:TextView): Unit {
