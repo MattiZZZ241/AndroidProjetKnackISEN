@@ -40,6 +40,10 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         holder.contentView.text = post.content
         holder.likeCount.text = post.reactions.like.toString()
         holder.likeButton.text = if (post.reactions.userLiked) "Unlike" else "Like"
+
+
+
+
         holder.likeButton.setOnClickListener() {
 
             likeAction(post)
