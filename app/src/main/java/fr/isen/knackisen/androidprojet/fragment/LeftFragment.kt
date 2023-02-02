@@ -7,13 +7,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import fr.isen.knackisen.androidprojet.AddCommentActivity
 import fr.isen.knackisen.androidprojet.CommentsActivity
+import fr.isen.knackisen.androidprojet.ReactionsManager
 import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
@@ -25,6 +29,10 @@ class LeftFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var postContainer: List<Post>
     private lateinit var adapter: ListPostAdapter
+    var database = Firebase.database
+    var getUser = Firebase.auth.currentUser
+    val user = User(getUser!!.uid, getUser?.displayName.toString())
+    var reactionsManager = ReactionsManager()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -98,22 +106,18 @@ class LeftFragment : Fragment() {
             startActivity(intent)
         }
 
-        val onLike = fun (post: Post): Unit {
-            val moreLess: Int = if (post.reactions.userLiked) -1 else 1
-
-            val database = Firebase.database
-            val postRef = database.getReference("posts").child(post.id)
-            postRef.child("reactions").child("like").setValue(post.reactions.like + moreLess)
-           // readDataFromFirebase()
-
-            post.reactions.userLiked = !post.reactions.userLiked
-            post.reactions.like += moreLess
+        val onLike = fun (post: Post, button: Button, count:TextView): Unit {
+            reactionsManager.clickLike(post, button, count)
 
             adapter.refreshList(postContainer)
            // recyclerViewRefresh()
         }
 
-        adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike)
+        val checkLike = fun (post: Post, button: Button, count:TextView): Unit {
+            reactionsManager.checkalreadyliked(post, button, count)
+        }
+
+        adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike,checkLike)
         recyclerView.adapter = adapter
 
         // mettre dans le bon ordre les posts (plus récent en premier)
