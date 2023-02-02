@@ -1,6 +1,6 @@
 package fr.isen.knackisen.androidprojet.fragment
 
-import ListPostAdapter
+import fr.isen.knackisen.androidprojet.adapter.ListPostAdapter
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -71,7 +71,7 @@ class LeftFragment : Fragment() {
                         val commentUserId = comment.child("user").child("id").value.toString()
                         val commentUser = User(commentUserId, commentName)
 
-                        commentList.add(Comment(commentId, commentContent, commentUser))
+                        commentList.add(Comment(commentId, commentContent, commentUser,Reactions(0,false, listOf())))
                     }
                     if (likes == null) {
                         likes = 0

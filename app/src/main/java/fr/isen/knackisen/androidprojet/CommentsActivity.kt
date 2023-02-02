@@ -27,6 +27,7 @@ class CommentsActivity : AppCompatActivity() {
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var listComment: List<Comment>
     private lateinit var parentPost: Post
+    private var reactionsManager = ReactionsManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,7 +73,16 @@ class CommentsActivity : AppCompatActivity() {
             i.putExtra("id", ids)
             startActivity(i)
         }
-        commentsAdapter = CommentsAdapter(listComment, toCreateComment)
+
+        val onLike = fun (post: Comment, button: Button, count:TextView): Unit {
+            reactionsManager.clickLike(post, button, count)
+        }
+
+        val checkLike = fun (post: Comment, button: Button, count:TextView): Unit {
+            reactionsManager.checkalreadyliked(post, button, count)
+        }
+
+        commentsAdapter = CommentsAdapter(listComment, toCreateComment, onLike, checkLike)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.commentButton.setOnClickListener { newComment() }
@@ -92,12 +102,16 @@ class CommentsActivity : AppCompatActivity() {
                     val name = snapshot.child("user").child("name").value.toString()
                     val userId = snapshot.child("user").child("id").value.toString()
                     val user = User(userId, name)
-                    val comment = Comment(id, content, user)
+                    val comment = Comment(id, content, user, Reactions(0,false, listOf()))
                     listComment += comment
                 }
                 listComment = listComment.drop(1)
                 //list without first post
-                commentsAdapter.updateList(listComment)
+
+
+
+
+                commentsAdapter.updateList(listComment )
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
             }

@@ -10,9 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.isen.knackisen.androidprojet.R
 import fr.isen.knackisen.androidprojet.ReactionsManager
 import fr.isen.knackisen.androidprojet.data.model.Comment
+import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 
-class CommentsAdapter (var list: List<Comment>, val toCreateComment: (String)-> Unit ) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
+class CommentsAdapter (var list: List<Comment>, val toCreateComment: (String)-> Unit, val likeAction: (Comment, Button, TextView) -> Unit, val checkLike: (Comment, Button, TextView) -> Unit) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
 
     fun updateList(newList: List<Comment>) {
         list = newList
@@ -33,22 +34,19 @@ class CommentsAdapter (var list: List<Comment>, val toCreateComment: (String)-> 
         var reactionsManager = ReactionsManager()
         holder.username.text = list[position].user.name
         holder.content.text = list[position].content
-        holder.likeCount.text = "0"
-        holder.likeButton.setOnClickListener {
-            var refresh = fun (reactions: Reactions, button: Button, likes: TextView) {
-                if (reactions.userLiked) {
-                    //text button
-                    button.text = "Unlike"
-                } else {
-                    button.text = "Like"
-                }
-                likes.text = reactions.like.toString()
-            }
-            reactionsManager.clickLike (refresh, holder.likeButton, holder.likeCount)
+
+        checkLike(list[position], holder.likeButton, holder.likeCount)
+
+        holder.likeButton.setOnClickListener() {
+            likeAction(list[position], holder.likeButton, holder.likeCount)
         }
+
+
         holder.commentButton.setOnClickListener {
             toCreateComment(list[position].id)
         }
+
+
 
     }
 

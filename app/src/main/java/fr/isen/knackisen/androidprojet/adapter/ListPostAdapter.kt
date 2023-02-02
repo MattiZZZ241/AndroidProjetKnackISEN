@@ -1,3 +1,5 @@
+package fr.isen.knackisen.androidprojet.adapter
+
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
