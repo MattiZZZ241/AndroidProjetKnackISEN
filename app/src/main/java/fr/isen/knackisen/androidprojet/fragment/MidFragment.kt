@@ -52,10 +52,17 @@ class MidFragment : Fragment() {
         }
 
         binding.buttonPost.setOnClickListener {
-            val post = prepareData(currentUser, key, reactions)
-            database.child(key).setValue(post)
-            binding.inputPost.setText("")
-            Toast.makeText(context, "Post added", Toast.LENGTH_SHORT).show()
+            if (binding.inputPost.text.toString().isEmpty()) {
+                Toast.makeText(context, "Please enter a post", Toast.LENGTH_SHORT).show()
+            }
+            else
+            {
+                val post = prepareData(User(getUser.uid,getUser.displayName.toString()), key, reactions)
+                database.child(key).setValue(post)
+                binding.inputPost.setText("")
+                Toast.makeText(context, "Post added", Toast.LENGTH_SHORT).show()
+            }
+
         }
 
         return binding.root
