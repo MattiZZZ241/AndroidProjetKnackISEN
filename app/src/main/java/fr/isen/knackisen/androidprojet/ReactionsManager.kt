@@ -38,6 +38,10 @@ class ReactionsManager() {
                         database.getReference("posts/${parent.id}/reactions")
                             .setValue(parent.reactions)
                         // update view
+                        likeButton.text = "like"
+                        likeCount.text = parent.reactions.like.toString()
+
+
 
                         // envoye du post a la base de donnée user
                         database.getReference("users/${user.id}/idpostlike/${parent.id}")
@@ -48,8 +52,13 @@ class ReactionsManager() {
                         parent.reactions.like += 1
                         parent.reactions.userLiked = true
                         // update database
+
                         database.getReference("posts/${parent.id}/reactions")
                             .setValue(parent.reactions)
+
+                        likeButton.text = "unlike"
+                        likeCount.text = parent.reactions.like.toString()
+
 
                         database.getReference("users/${user.id}/idpostlike/${parent.id}")
                             .setValue(parent.reactions)
@@ -74,6 +83,8 @@ class ReactionsManager() {
                         database.getReference("comments/${split}/reactions")
                             .setValue(parent.reactions)
                         // update view
+                        likeButton.text = "like"
+                        likeCount.text = parent.reactions.like.toString()
 
                         // envoye du post a la base de donnée user
                         database.getReference("users/${user.id}/idcommentlike/${split}")
@@ -84,15 +95,20 @@ class ReactionsManager() {
                         parent.reactions.like += 1
                         parent.reactions.userLiked = true
                         // update database
+
                         database.getReference("comments/${split}/reactions")
                             .setValue(parent.reactions)
+
+                        likeButton.text = "unlike"
+                        likeCount.text = parent.reactions.like.toString()
+
 
                         database.getReference("users/${user.id}/idcommentlike/${split}")
                             .setValue(parent.reactions)
     }
                 }
         }
-        checkalreadyliked(parent, likeButton, likeCount)
+
     }
 
     fun checkalreadyliked(parent: Any, likeButton: Button, likeCount: TextView) {
