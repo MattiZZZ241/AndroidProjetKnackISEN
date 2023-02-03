@@ -62,7 +62,7 @@ class LeftFragment : Fragment() {
 
 
                     // get comment list
-                    val commentList = mutableListOf<Comment>()
+                    val commentList = mutableListOf<Post>()
                     for (comment in snapshot.child("comments").children) {
                         val commentId = comment.child("id").value.toString()
                         val commentContent = comment.child("content").value.toString()
@@ -71,7 +71,7 @@ class LeftFragment : Fragment() {
                         val commentUserId = comment.child("user").child("id").value.toString()
                         val commentUser = User(commentUserId, commentName)
 
-                        commentList.add(Comment(commentId, commentContent, commentUser,Reactions(0,false, listOf())))
+                        commentList.add(Post(commentId, commentContent, commentUser,Reactions(0,false, listOf())))
                     }
                     if (likes == null) {
                         likes = 0

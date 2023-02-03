@@ -12,11 +12,12 @@ import fr.isen.knackisen.androidprojet.ReactionsManager
 import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
+import java.text.FieldPosition
 
-class CommentsAdapter (var list: List<Comment>, val toCreateComment: (String)-> Unit, val likeAction: (Comment, Button, TextView) -> Unit, val checkLike: (Comment, Button, TextView) -> Unit) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
+class CommentsAdapter (var post: List<Post>, val toCreateComment: (Post)-> Unit, val likeAction: (Post, Button, TextView) -> Unit, val onComment: (post:Post) -> Unit, val checkLike: (Post, Button, TextView) -> Unit) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
 
-    fun updateList(newList: List<Comment>) {
-        list = newList
+    fun updateList(newList: List<Post>) {
+        post = newList
         notifyDataSetChanged()
     }
 
@@ -26,24 +27,25 @@ class CommentsAdapter (var list: List<Comment>, val toCreateComment: (String)-> 
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return post.size
     }
 
     override fun onBindViewHolder(holder: CommentsViewHolder, position: Int) {
-        var reactions = Reactions(0, false, listOf())
         var reactionsManager = ReactionsManager()
-        holder.username.text = list[position].user.name
-        holder.content.text = list[position].content
+        var postCurrent: Post = post[position]
 
-        checkLike(list[position], holder.likeButton, holder.likeCount)
-
+        holder.username.text = postCurrent.user.name
+        holder.content.text = postCurrent.content
+       // checkLike(postCurrent, holder.likeButton, holder.likeCount)
+        reactionsManager.checkalreadyliked(postCurrent, holder.likeButton, holder.likeCount)
         holder.likeButton.setOnClickListener() {
-            likeAction(list[position], holder.likeButton, holder.likeCount)
+            likeAction(postCurrent, holder.likeButton, holder.likeCount)
+            reactionsManager.clickLike(postCurrent, holder.likeButton, holder.likeCount)
         }
 
 
         holder.commentButton.setOnClickListener {
-            toCreateComment(list[position].id)
+            toCreateComment(postCurrent)
         }
 
 

@@ -25,7 +25,7 @@ class CommentsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCommentsBinding
     private lateinit var database: FirebaseDatabase
     private lateinit var commentsAdapter: CommentsAdapter
-    private lateinit var listComment: List<Comment>
+    private lateinit var listComment: List<Post>
     private lateinit var parentPost: Post
     private var reactionsManager = ReactionsManager()
 
@@ -68,21 +68,26 @@ class CommentsActivity : AppCompatActivity() {
         }
        // var commentList = listOf(Comment("test","This is the message", User(1, "Serg")),Comment("id","Another message", User(2, "L'autre")))
 
-        val toCreateComment = fun (ids: String): Unit {
+        val toCreateComment = fun (post: Post): Unit {
             val i = Intent(this@CommentsActivity, AddCommentActivity::class.java)
-            i.putExtra("id", ids)
+            i.putExtra("post", Gson().toJson(post))
             startActivity(i)
         }
 
-        val onLike = fun (post: Comment, button: Button, count:TextView): Unit {
-            reactionsManager.clickLike(post, button, count)
+        val onLike = fun (post: Post, button: Button, count:TextView): Unit {
+          //  reactionsManager.clickLike(post, button, count)
         }
 
-        val checkLike = fun (post: Comment, button: Button, count:TextView): Unit {
-            reactionsManager.checkalreadyliked(post, button, count)
+        val checkLike = fun (post: Post, button: Button, count:TextView): Unit {
+              // var reactions = Reactions(0, false, listOf())
+            //  reactionsManager.checkalreadyliked(post, button, count)
         }
-
-        commentsAdapter = CommentsAdapter(listComment, toCreateComment, onLike, checkLike)
+        val onComment = fun (post:Post): Unit {
+            val intent = Intent(this@CommentsActivity, CommentsActivity::class.java)
+            intent.putExtra("post", Gson().toJson(post))
+            startActivity(intent)
+        }
+        commentsAdapter = CommentsAdapter(listComment, toCreateComment, onLike, onComment, checkLike)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.commentButton.setOnClickListener { newComment() }
@@ -102,7 +107,7 @@ class CommentsActivity : AppCompatActivity() {
                     val name = snapshot.child("user").child("name").value.toString()
                     val userId = snapshot.child("user").child("id").value.toString()
                     val user = User(userId, name)
-                    val comment = Comment(id, content, user, Reactions(0,false, listOf()))
+                    val comment = Post(id, content, user, Reactions(0,false, listOf()))
                     listComment += comment
                 }
                 listComment = listComment.drop(1)
