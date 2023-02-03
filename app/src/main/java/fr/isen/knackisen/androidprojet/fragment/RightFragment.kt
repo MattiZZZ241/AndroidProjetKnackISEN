@@ -57,7 +57,7 @@ class RightFragment : Fragment() {
         loadData()
 
         binding.button.setOnClickListener {
-            updateData(UserInfo(binding.userInfoName.text.toString(), binding.userInfoAge.text.toString().toInt()))
+            updateData(UserInfo(binding.userInfoAge.text.toString().toInt()))
         }
 
         binding.privateInfos.setOnClickListener {
@@ -102,7 +102,7 @@ class RightFragment : Fragment() {
             if (task.isSuccessful) {
                 val userInfo = task.result?.getValue(UserInfo::class.java)
                 binding.userInfoAge.setText(userInfo?.age.toString())
-                binding.userInfoName.setText(userInfo?.name.toString())
+                binding.userInfoName.setText(user.displayName)
                 if (binding.userInfoAge.text.toString() == "null") {
                     binding.userInfoAge.setText("")
                 }
@@ -121,7 +121,7 @@ class RightFragment : Fragment() {
         Toast.makeText(activity, "Profile updated", Toast.LENGTH_SHORT).show()
         userInfo.uid=UID
         val profileName = userProfileChangeRequest {
-            displayName = userInfo.name
+            displayName = binding.userInfoName.text.toString()
         }
         user.updateProfile(profileName)
 
