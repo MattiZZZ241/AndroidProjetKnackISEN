@@ -54,7 +54,10 @@ class MidFragment : Fragment() {
         binding.buttonPost.setOnClickListener {
             val post = prepareData(currentUser, key, reactions)
             database.child(key).setValue(post)
+            binding.inputPost.setText("")
+            Toast.makeText(context, "Post added", Toast.LENGTH_SHORT).show()
         }
+
         return binding.root
     }
 
