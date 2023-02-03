@@ -55,8 +55,8 @@ class CommentsActivity : AppCompatActivity() {
         }
 
 
-        binding.nameUserPostCommentView.text = parentPost.user.name
-        binding.contentPostCommentView.text = parentPost.content
+        binding.nameUserPostView.text = parentPost.user.name
+        binding.contentPostView.text = parentPost.content
         binding.likesCount.text = parentPost.reactions.like.toString()
         var reactionsManager = ReactionsManager()
         reactionsManager.checkalreadyliked(parentPost, binding.likeButton, binding.likesCount)
