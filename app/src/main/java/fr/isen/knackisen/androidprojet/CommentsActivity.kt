@@ -12,7 +12,7 @@ import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
-import fr.isen.knackisen.androidprojet.adapter.CommentsAdapter
+import fr.isen.knackisen.androidprojet.adapter.ListPostAdapter
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 import fr.isen.knackisen.androidprojet.data.model.User
@@ -22,7 +22,8 @@ import fr.isen.knackisen.androidprojet.databinding.ActivityCommentsBinding
 class CommentsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityCommentsBinding
     private lateinit var database: FirebaseDatabase
-    private lateinit var commentsAdapter: CommentsAdapter
+    private lateinit var currentPostRef: DatabaseReference
+    private lateinit var commentsAdapter: ListPostAdapter
     private lateinit var listComment: List<Post>
     private lateinit var parentPost: Post
     private var reactionsManager = ReactionsManager()
@@ -35,6 +36,7 @@ class CommentsActivity : AppCompatActivity() {
         database = Firebase.database
 
 
+
         val postString = intent.getStringExtra("post")
         parentPost = Gson().fromJson(postString, Post::class.java)
 
@@ -42,6 +44,16 @@ class CommentsActivity : AppCompatActivity() {
             finish()
         }
         val parentPost: Post = Gson().fromJson(postString, Post::class.java)
+
+        currentPostRef = database.getReference("posts")
+        // put "[-NNLdVxNlfGAPuQSLS-7, -NNLgl8d6NB-l6a8XU9L]" or "-NNLgl8d6NB-l6a8XU9L" in porentId as a list of string
+        var parentID:List<String> = parentPost.id.replace("[", "").replace("]", "").split(", ")
+        Log.d("Comment", "Parent IDs: $parentID")
+        for(id in parentID) {
+            Log.d("Comment", "Parent ID: $id")
+            currentPostRef = currentPostRef.child(id).child("reactions").child("comments")
+        }
+
 
         binding.nameUserPostCommentView.text = parentPost.user.name
         binding.contentPostCommentView.text = parentPost.content
@@ -85,7 +97,7 @@ class CommentsActivity : AppCompatActivity() {
             intent.putExtra("post", Gson().toJson(post))
             startActivity(intent)
         }
-        commentsAdapter = CommentsAdapter(listComment, toCreateComment, onLike, onComment, checkLike)
+        commentsAdapter = ListPostAdapter(listComment, onComment, toCreateComment, onLike,  checkLike)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.commentButton.setOnClickListener { newComment() }
@@ -94,12 +106,16 @@ class CommentsActivity : AppCompatActivity() {
 
 
     private fun subToComments(post: Post){
-        val ref = database.getReference("posts").child(post.id).child("reactions").child("comments")
-        Log.d(TAG, "subToComments: $ref")
-        ref.get().addOnCompleteListener() { task ->
+
+        Log.d("Comment", "Current post ref: $currentPostRef")
+
+
+        currentPostRef.get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 listComment = listOf()
+                Log.d("Comment", task.result.toString())
                 for (snapshot in task.result!!.children) {
+                    Log.d("Comment", "the inside ${snapshot.value}")
                     val id = snapshot.child("id").value.toString()
                     val content = snapshot.child("content").value.toString()
                     val name = snapshot.child("user").child("name").value.toString()
@@ -114,7 +130,7 @@ class CommentsActivity : AppCompatActivity() {
 
 
 
-                commentsAdapter.updateList(listComment )
+                commentsAdapter.refreshList(listComment )
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
             }
