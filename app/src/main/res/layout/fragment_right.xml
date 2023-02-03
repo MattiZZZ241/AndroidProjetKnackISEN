@@ -49,9 +49,9 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.526"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userInfoAge" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_FUIA" />
 
     <TextView
         android:id="@+id/infoAge"
@@ -109,12 +109,60 @@
         android:id="@+id/MyPostButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="148dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="224dp"
         android:text="My Posts"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userInfoAge" />
 
+    <RadioGroup
+        android:id="@+id/radioGroup_FUIA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="@+id/knack_FUIA"
+        app:layout_constraintTop_toBottomOf="@+id/knack_FUIA">
+
+        <RadioButton
+            android:id="@+id/radioButton_porc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Pork"
+            android:textColor="@color/sausage_orange"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/radioButton_poulet"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Chicken"
+            android:textColor="@color/sausage_orange"
+            android:textStyle="bold" />
+
+        <RadioButton
+            android:id="@+id/radioButton_vegi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:text="Vegan"
+            android:textColor="@color/sausage_orange"
+            android:textStyle="bold" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/knack_FUIA"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:text="What's your Knack type ?"
+        android:textColor="@color/sausage_orange"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoAge" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
