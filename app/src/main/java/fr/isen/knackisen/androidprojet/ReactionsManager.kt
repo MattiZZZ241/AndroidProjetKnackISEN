@@ -1,11 +1,12 @@
 package fr.isen.knackisen.androidprojet
 
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import fr.isen.knackisen.androidprojet.data.model.Comment
+import com.google.gson.Gson
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 import fr.isen.knackisen.androidprojet.data.model.User
@@ -19,24 +20,35 @@ class ReactionsManager() {
 
 
     fun clickLike(
-        parent: Any,
+        parent: Post,
         likeButton: Button,
         likeCount: TextView
     ) {
-        // if parent is un Post or an comment
-        if (parent is Post) {
+
+        val idList: List<String> = parent.id.split(",").map { it.trim() }
+
+        // get the reference of the post
+        var postRef = database.getReference("posts")
+        for (id in idList) {
+            postRef = postRef.child(id).child("reactions").child("comments")
+        }
+        postRef = postRef.parent!!.parent!!
+        Log.d("idList", idList.toString())
+        Log.d("postRef", postRef.toString())
 
             //get reactionstate from database
-            database.getReference("users/${user.id}/idpostlike/${parent.id}").get()
+            database.getReference("users/${user.id}/idlike/${idList.last()}").get()
                 .addOnSuccessListener {
                     // if user already liked
                     if (it != null && it.value != null) {
                         // remove like
                         parent.reactions.like -= 1
                         parent.reactions.userLiked = false
-                        // update database
-                        database.getReference("posts/${parent.id}/reactions")
-                            .setValue(parent.reactions)
+
+
+                        postRef.child("reactions").setValue(parent.reactions)
+
+
                         // update view
                         likeButton.text = "like"
                         likeCount.text = parent.reactions.like.toString()
@@ -44,77 +56,33 @@ class ReactionsManager() {
 
 
                         // envoye du post a la base de donnée user
-                        database.getReference("users/${user.id}/idpostlike/${parent.id}")
-                            .removeValue()
+                        database.getReference("users/${user.id}/idlike/${idList.last()}").removeValue()
 
                     } else {
                         // add like
                         parent.reactions.like += 1
                         parent.reactions.userLiked = true
-                        // update database
 
-                        database.getReference("posts/${parent.id}/reactions")
-                            .setValue(parent.reactions)
+                        // update database
+                        postRef.child("reactions").setValue(parent.reactions)
 
                         likeButton.text = "unlike"
                         likeCount.text = parent.reactions.like.toString()
 
-
-                        database.getReference("users/${user.id}/idpostlike/${parent.id}")
-                            .setValue(parent.reactions)
+                        database.getReference("users/${user.id}/idlike/${idList.last()}/path").setValue(idList)
+                        database.getReference("users/${user.id}/idlike/${idList.last()}/reactions").setValue(parent.reactions)
 
 
                     }
                 }
-        }
-        else if (parent is Post /*Comment*/) {
-            var split = parent.id.split("[", "]")[1]
-            split = split.split(", ")[1]
-
-            //get reactionstate from database
-            database.getReference("users/${user.id}/idcommentlike/${split}").get()
-                .addOnSuccessListener {
-                    // if user already liked
-                    if (it != null && it.value != null) {
-                        // remove like
-                        parent.reactions.like -= 1
-                        parent.reactions.userLiked = false
-                        // update database
-                        database.getReference("comments/${split}/reactions")
-                            .setValue(parent.reactions)
-                        // update view
-                        likeButton.text = "like"
-                        likeCount.text = parent.reactions.like.toString()
-
-                        // envoye du post a la base de donnée user
-                        database.getReference("users/${user.id}/idcommentlike/${split}")
-                            .removeValue()
-
-                    } else {
-                        // add like
-                        parent.reactions.like += 1
-                        parent.reactions.userLiked = true
-                        // update database
-
-                        database.getReference("comments/${split}/reactions")
-                            .setValue(parent.reactions)
-
-                        likeButton.text = "unlike"
-                        likeCount.text = parent.reactions.like.toString()
 
 
-                        database.getReference("users/${user.id}/idcommentlike/${split}")
-                            .setValue(parent.reactions)
-    }
-                }
-        }
 
     }
 
-    fun checkalreadyliked(parent: Any, likeButton: Button, likeCount: TextView) {
-        if (parent is Post) {
-            database.getReference("users/${user.id}/idpostlike/${parent.id}").get()
-                .addOnSuccessListener {
+    fun checkalreadyliked(parent: Post, likeButton: Button, likeCount: TextView) {
+        val currentId = parent.id.split(",").last().replace("]", "").replace(" ", "")
+            database.getReference("users/${user.id}/idlike/'${currentId}'").get().addOnSuccessListener {
                     if (it != null && it.value != null) {
                         likeButton.text = "Unlike"
                         likeCount.text = parent.reactions.like.toString()
@@ -122,24 +90,9 @@ class ReactionsManager() {
                         likeButton.text = "Like"
                         likeCount.text = parent.reactions.like.toString()
                     }
-                }
-        }
-        else if (parent is Post /*Comment*/) {
-            var split = parent.id.split("[", "]")[1]
-            split = split.split(", ")[1]
 
-            database.getReference("users/${user.id}/idcommentlike/${split}").get()
-                .addOnSuccessListener {
-                    if (it != null && it.value != null) {
-                        likeButton.text = "Unlike"
-                        likeCount.text = parent.reactions.like.toString()
-                    } else {
-                        likeButton.text = "Like"
-                        likeCount.text = parent.reactions.like.toString()
-                    }
-                }
-        }
 
+                }
     }
 }
 

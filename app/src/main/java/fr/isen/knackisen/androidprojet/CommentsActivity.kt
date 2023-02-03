@@ -81,6 +81,7 @@ class CommentsActivity : AppCompatActivity() {
         val checkLike = fun (post: Post, button: Button, count:TextView): Unit {
             reactionsManager.checkalreadyliked(post, button, count)
         }
+        Log.d("list comment", listComment.toString())
 
         commentsAdapter = CommentsAdapter(listComment, toCreateComment, onLike, checkLike)
         binding.listComments.adapter = commentsAdapter
