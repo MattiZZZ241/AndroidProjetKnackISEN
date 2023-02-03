@@ -7,4 +7,6 @@
     <string name="Like">Like</string>
     <string name="value">XX</string>
     <string name="input_for_name">input for name</string>
+    <string name="write_your_name">Write your name</string>
+    <string name="write_your_age">Write your age</string>
 </resources>

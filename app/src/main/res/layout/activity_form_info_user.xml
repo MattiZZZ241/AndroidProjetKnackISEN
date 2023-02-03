@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".FormInfoUserActivity">
 
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Sausage details"
+        android:textColor="@color/sausage_orange"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/button_FIUA"
         android:layout_width="wrap_content"
@@ -14,8 +27,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.93" />
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup_FUIA"
+        app:layout_constraintVertical_bias="0.2" />
 
     <EditText
         android:id="@+id/userInfoName_FIUA"
@@ -23,13 +36,10 @@
         android:layout_height="46dp"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="@string/write_your_name"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/infoName_FIUA"
-        app:layout_constraintTop_toBottomOf="@+id/infoName_FIUA"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/infoName_FIUA" />
 
     <EditText
         android:id="@+id/userInfoAge_FIUA"
@@ -37,51 +47,42 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
-        android:inputType="textPersonName"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/infoAge_FIUA"
-        app:layout_constraintTop_toBottomOf="@+id/infoAge_FIUA"
-        app:layout_constraintVertical_bias="0.0" />
+        android:hint="@string/write_your_age"
+        android:inputType="number"
+        app:layout_constraintStart_toStartOf="@+id/infoName_FIUA"
+        app:layout_constraintTop_toBottomOf="@+id/infoAge_FIUA" />
 
     <TextView
         android:id="@+id/infoName_FIUA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="32dp"
         android:text="Name:"
+        android:textColor="@color/sausage_orange"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.19" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintVertical_bias="0.100000024" />
 
     <TextView
         android:id="@+id/infoAge_FIUA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
         android:text="Age:"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/infoName_FIUA"
-        app:layout_constraintVertical_bias="0.13" />
+        android:textColor="@color/sausage_orange"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/infoName_FIUA"
+        app:layout_constraintTop_toBottomOf="@+id/userInfoName_FIUA" />
 
     <RadioGroup
         android:id="@+id/radioGroup_FUIA"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
         android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/knack_FUIA"
         app:layout_constraintTop_toBottomOf="@+id/knack_FUIA">
 
         <RadioButton
@@ -89,32 +90,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="Porc" />
+            android:text="Pork"
+            android:textColor="@color/sausage_orange"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButton_poulet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="Poulet" />
+            android:text="Chicken"
+            android:textColor="@color/sausage_orange"
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButton_vegi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0"
-            android:text="Vegi" />
+            android:text="Vegan"
+            android:textColor="@color/sausage_orange"
+            android:textStyle="bold" />
     </RadioGroup>
 
     <TextView
         android:id="@+id/knack_FUIA"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:text="quelle type de knacki etes vous ?"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="24dp"
+        android:text="What's your Knack type ?"
+        android:textColor="@color/sausage_orange"
+        android:textSize="24sp"
+        app:layout_constraintStart_toStartOf="@+id/infoName_FIUA"
         app:layout_constraintTop_toBottomOf="@+id/userInfoAge_FIUA" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="@+id/textView"
+        app:srcCompat="@drawable/sausage_pack" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
