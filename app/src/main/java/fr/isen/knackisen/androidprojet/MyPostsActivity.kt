@@ -5,11 +5,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.adapter.ListPostAdapter
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
@@ -116,7 +119,13 @@ class MyPostsActivity : AppCompatActivity() {
             reactionsManager.checkalreadyliked(post, button, count)
         }
 
-        adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike,checkLike)
+        val changeImage = fun (post: Post, image: ImageView): Unit {
+            getProfilePicture(post.user.id, image)
+
+
+        }
+
+        adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike,checkLike, changeImage)
         recyclerView.adapter = adapter
 
         // mettre dans le bon ordre les posts (plus récent en premier)
@@ -124,7 +133,16 @@ class MyPostsActivity : AppCompatActivity() {
 
         adapter.refreshList(postContainer)
     }
-
+    private fun getProfilePicture(id: String, imageView: ImageView) {
+        val storage = Firebase.storage.reference
+        val imageRef = storage.child("profilePictures/${id}")
+        imageRef.downloadUrl.addOnSuccessListener {
+            Log.d("IMAGE", it.toString())
+            Picasso.get().load(it).into(imageView)
+        }.addOnFailureListener {
+            Log.d("IMAGE", "error")
+        }
+    }
     override fun onResume() {
         super.onResume()
         readDataFromFirebase()

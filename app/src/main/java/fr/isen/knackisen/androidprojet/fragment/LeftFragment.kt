@@ -2,19 +2,23 @@ package fr.isen.knackisen.androidprojet.fragment
 
 import fr.isen.knackisen.androidprojet.adapter.ListPostAdapter
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.AddCommentActivity
 import fr.isen.knackisen.androidprojet.CommentsActivity
 import fr.isen.knackisen.androidprojet.ReactionsManager
@@ -30,6 +34,7 @@ class LeftFragment : Fragment() {
     private lateinit var adapter: ListPostAdapter
     var database = Firebase.database
     var getUser = Firebase.auth.currentUser
+    var storage = Firebase.storage.reference
     val user = User(getUser!!.uid, getUser?.displayName.toString())
     var reactionsManager = ReactionsManager()
 
@@ -128,13 +133,30 @@ class LeftFragment : Fragment() {
             reactionsManager.checkalreadyliked(post, button, count)
         }
 
-        adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike,checkLike)
+        val changeImage = fun (post: Post, image: ImageView): Unit {
+            getProfilePicture(post.user.id, image)
+
+
+        }
+
+        adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike,checkLike, changeImage)
         recyclerView.adapter = adapter
 
         // mettre dans le bon ordre les posts (plus récent en premier)
         postContainer = postContainer.reversed()
 
         adapter.refreshList(postContainer)
+    }
+
+    private fun getProfilePicture(id: String, imageView: ImageView) {
+        val storage = Firebase.storage.reference
+        val imageRef = storage.child("profilePictures/${id}")
+        imageRef.downloadUrl.addOnSuccessListener {
+            Log.d("IMAGE", it.toString())
+            Picasso.get().load(it).into(imageView)
+        }.addOnFailureListener {
+            Log.d("IMAGE", "error")
+        }
     }
 
     override fun onResume() {

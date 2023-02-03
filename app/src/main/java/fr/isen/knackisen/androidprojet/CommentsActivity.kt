@@ -5,13 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.adapter.ListPostAdapter
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
@@ -97,13 +100,27 @@ class CommentsActivity : AppCompatActivity() {
             intent.putExtra("post", Gson().toJson(post))
             startActivity(intent)
         }
-        commentsAdapter = ListPostAdapter(listComment, onComment, toCreateComment, onLike,  checkLike)
+        val changeImage = fun (post: Post, image: ImageView): Unit {
+            getProfilePicture(post.user.id, image)
+
+
+        }
+        commentsAdapter = ListPostAdapter(listComment, onComment, toCreateComment, onLike,  checkLike, changeImage)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.commentButton.setOnClickListener { newComment() }
     }
 
-
+    private fun getProfilePicture(id: String, imageView: ImageView) {
+        val storage = Firebase.storage.reference
+        val imageRef = storage.child("profilePictures/${id}")
+        imageRef.downloadUrl.addOnSuccessListener {
+            Log.d("IMAGE", it.toString())
+            Picasso.get().load(it).into(imageView)
+        }.addOnFailureListener {
+            Log.d("IMAGE", "error")
+        }
+    }
 
     private fun subToComments(post: Post){
 

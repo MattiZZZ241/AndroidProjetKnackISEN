@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.isen.knackisen.androidprojet.R
 import fr.isen.knackisen.androidprojet.data.model.Post
 
-class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit, val toCreateComment: (Post) -> Unit, val likeAction: (Post, Button, TextView) -> Unit, val checkLike: (Post, Button, TextView) -> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
+class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit, val toCreateComment: (Post) -> Unit, val likeAction: (Post, Button, TextView) -> Unit, val checkLike: (Post, Button, TextView) -> Unit, val changePPA: (Post, ImageView) ->Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
     // adapter conteneur
     // RecyclerView contenu
     // Holds the views for adding it to text
@@ -55,6 +55,8 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         holder.itemView.setOnClickListener{
             OnItemClickListener(post)
         }
+
+        changePPA(post, holder.imageView)
     }
     @SuppressLint("NotifyDataSetChanged")
     fun refreshList(newList: List<Post>) {
