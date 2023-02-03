@@ -1,5 +1,6 @@
+package fr.isen.knackisen.androidprojet.adapter
+
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import fr.isen.knackisen.androidprojet.R
 import fr.isen.knackisen.androidprojet.data.model.Post
 
-class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit, val toCreateComment: (Post) -> Unit, val likeAction: (Post) -> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
+class ListPostAdapter(private var list: List<Post>, private val OnItemClickListener: (Post) -> Unit, val toCreateComment: (Post) -> Unit, val likeAction: (Post, Button, TextView) -> Unit, val checkLike: (Post, Button, TextView) -> Unit) : RecyclerView.Adapter<ListPostAdapter.ViewHolder>() {
     // adapter conteneur
     // RecyclerView contenu
     // Holds the views for adding it to text
@@ -38,16 +39,12 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         val post = list[position]
         holder.nameView.text = post.user.name
         holder.contentView.text = post.content
-        holder.likeCount.text = post.reactions.like.toString()
-        holder.likeButton.text = if (post.reactions.userLiked) "Unlike" else "Like"
 
-
-
+        checkLike(post, holder.likeButton, holder.likeCount)
 
         holder.likeButton.setOnClickListener() {
 
-            likeAction(post)
-
+            likeAction(post, holder.likeButton, holder.likeCount)
 
         }
 

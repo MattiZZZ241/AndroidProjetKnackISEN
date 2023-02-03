@@ -27,6 +27,7 @@ class CommentsActivity : AppCompatActivity() {
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var listComment: List<Comment>
     private lateinit var parentPost: Post
+    private var reactionsManager = ReactionsManager()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,7 @@ class CommentsActivity : AppCompatActivity() {
         setContentView(binding.root)
         listComment = listOf()
         database = Firebase.database
+
 
         val postString = intent.getStringExtra("post")
         parentPost = Gson().fromJson(postString, Post::class.java)
@@ -46,11 +48,11 @@ class CommentsActivity : AppCompatActivity() {
         binding.nameUserPostCommentView.text = parentPost.user.name
         binding.contentPostCommentView.text = parentPost.content
         binding.likesCount.text = parentPost.reactions.like.toString()
-        checkButtonState(parentPost)
-
+        var reactionsManager = ReactionsManager()
+        reactionsManager.checkalreadyliked(parentPost, binding.likeButton, binding.likesCount)
         binding.likeButton.setOnClickListener {
-            onLike(parentPost)
-            checkButtonState(parentPost)
+
+            reactionsManager.clickLike(parentPost, binding.likeButton,binding.likesCount)
         }
 
 
@@ -71,7 +73,16 @@ class CommentsActivity : AppCompatActivity() {
             i.putExtra("id", ids)
             startActivity(i)
         }
-        commentsAdapter = CommentsAdapter(listComment, toCreateComment)
+
+        val onLike = fun (post: Comment, button: Button, count:TextView): Unit {
+            reactionsManager.clickLike(post, button, count)
+        }
+
+        val checkLike = fun (post: Comment, button: Button, count:TextView): Unit {
+            reactionsManager.checkalreadyliked(post, button, count)
+        }
+
+        commentsAdapter = CommentsAdapter(listComment, toCreateComment, onLike, checkLike)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.commentButton.setOnClickListener { newComment() }
@@ -91,12 +102,16 @@ class CommentsActivity : AppCompatActivity() {
                     val name = snapshot.child("user").child("name").value.toString()
                     val userId = snapshot.child("user").child("id").value.toString()
                     val user = User(userId, name)
-                    val comment = Comment(id, content, user)
+                    val comment = Comment(id, content, user, Reactions(0,false, listOf()))
                     listComment += comment
                 }
                 listComment = listComment.drop(1)
                 //list without first post
-                commentsAdapter.updateList(listComment)
+
+
+
+
+                commentsAdapter.updateList(listComment )
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
             }
@@ -107,30 +122,6 @@ class CommentsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         subToComments(parentPost)
-    }
-
-    private fun onLike (post: Post): Unit {
-        val moreLess: Int = if (post.reactions.userLiked) -1 else 1
-
-        val database = Firebase.database
-        val postRef = database.getReference("posts").child(post.id)
-        postRef.child("reactions").child("like").setValue(post.reactions.like + moreLess)
-        // readDataFromFirebase()
-
-        post.reactions.userLiked = !post.reactions.userLiked
-        post.reactions.like += moreLess
-        binding.likesCount.text = post.reactions.like.toString()
-
-    }
-
-    private fun checkButtonState(post: Post): Unit {
-
-        if (post.reactions.userLiked){
-            binding.likeButton.text = "unlike"
-        }
-        else{
-            binding.likeButton.text = "like"
-        }
     }
 
 
