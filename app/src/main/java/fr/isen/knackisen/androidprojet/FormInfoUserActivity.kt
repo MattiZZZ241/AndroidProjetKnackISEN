@@ -38,8 +38,12 @@ class FormInfoUserActivity : AppCompatActivity() {
 
 
         binding.buttonFIUA.setOnClickListener {
-            val radioButton = binding.radioGroupFUIA.findViewById<RadioButton>(binding.radioGroupFUIA.checkedRadioButtonId)
-            updateData(UserInfo(binding.userInfoNameFIUA.text.toString(), binding.userInfoAgeFIUA.text.toString().toInt(),"",radioButton.text.toString()))
+            if (binding.userInfoNameFIUA.text.toString().isEmpty() || binding.userInfoAgeFIUA.text.toString().isEmpty() || binding.radioGroupFUIA.checkedRadioButtonId == -1) {
+                Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
+            } else {
+                val radioButton = binding.radioGroupFUIA.findViewById<RadioButton>(binding.radioGroupFUIA.checkedRadioButtonId)
+                updateData(UserInfo(binding.userInfoNameFIUA.text.toString(), binding.userInfoAgeFIUA.text.toString().toInt(),"",radioButton.text.toString()))
+            }
         }
 
     }
@@ -56,6 +60,7 @@ class FormInfoUserActivity : AppCompatActivity() {
         }
         user.updateProfile(profileName)
 
-        //TODO intent
+        val intent = Intent(this@FormInfoUserActivity, MainActivity::class.java)
+        startActivity(intent)
     }
 }

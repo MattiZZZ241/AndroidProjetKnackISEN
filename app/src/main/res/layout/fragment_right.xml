@@ -24,7 +24,7 @@
         android:layout_height="46dp"
         android:layout_marginTop="12dp"
         android:ems="10"
-        android:hint="Write your name"
+        android:hint="@string/write_your_name"
         android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@+id/infoName"
         app:layout_constraintTop_toBottomOf="@+id/infoName" />
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:ems="10"
-        android:hint="Write your age"
+        android:hint="@string/write_your_age"
         android:inputType="number"
         app:layout_constraintStart_toStartOf="@+id/infoAge"
         app:layout_constraintTop_toBottomOf="@+id/infoAge" />
@@ -87,10 +87,10 @@
 
     <ImageButton
         android:id="@+id/profilePictureButton"
-        android:layout_width="143dp"
-        android:layout_height="136dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
@@ -100,8 +100,8 @@
         style="?android:attr/progressBarStyle"
         android:layout_width="76dp"
         android:layout_height="69dp"
-        android:layout_marginStart="92dp"
-        android:layout_marginTop="56dp"
+        android:layout_marginStart="68dp"
+        android:layout_marginTop="68dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
