@@ -18,7 +18,6 @@ import com.google.gson.Gson
 import fr.isen.knackisen.androidprojet.AddCommentActivity
 import fr.isen.knackisen.androidprojet.CommentsActivity
 import fr.isen.knackisen.androidprojet.ReactionsManager
-import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 import fr.isen.knackisen.androidprojet.data.model.User

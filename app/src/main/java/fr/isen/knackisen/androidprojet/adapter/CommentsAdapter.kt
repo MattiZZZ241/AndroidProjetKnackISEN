@@ -1,6 +1,5 @@
 package fr.isen.knackisen.androidprojet.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import fr.isen.knackisen.androidprojet.R
 import fr.isen.knackisen.androidprojet.ReactionsManager
-import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
-import fr.isen.knackisen.androidprojet.data.model.Reactions
-import java.text.FieldPosition
 
 class CommentsAdapter (var post: List<Post>, val toCreateComment: (Post)-> Unit, val likeAction: (Post, Button, TextView) -> Unit, val onComment: (post:Post) -> Unit, val checkLike: (Post, Button, TextView) -> Unit) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
 
