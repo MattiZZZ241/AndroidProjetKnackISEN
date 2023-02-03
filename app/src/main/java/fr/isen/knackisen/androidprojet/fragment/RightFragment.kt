@@ -64,7 +64,7 @@ class RightFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.uploadButton.setOnClickListener {
+        binding.profilePictureButton.setOnClickListener {
             val intent = Intent()
                 .setType("image/*")
                 .setAction(Intent.ACTION_GET_CONTENT)
@@ -92,7 +92,7 @@ class RightFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == -1) {
             profilePicture = data?.data
-            Picasso.get().load(profilePicture).fit().centerCrop().into(binding.profilePicture)
+            Picasso.get().load(profilePicture).fit().centerCrop().into(binding.profilePictureButton)
         }
     }
 
@@ -142,20 +142,20 @@ class RightFragment : Fragment() {
 
     private fun getProfilePicture()
     {
-        binding.profilePicture.visibility = View.GONE
+        binding.profilePictureButton.visibility = View.GONE
         val storageRef = storage.reference
         val imageRef = storageRef.child("profilePictures/${user.uid}")
         imageRef.downloadUrl.addOnSuccessListener {
             Log.d("DOWNLOAD", "SUCCESS")
-            Picasso.get().load(it).fit().centerCrop().into(binding.profilePicture)
-            binding.profilePicture.visibility = View.VISIBLE
+            Picasso.get().load(it).fit().centerCrop().into(binding.profilePictureButton)
+            binding.profilePictureButton.visibility = View.VISIBLE
             binding.progressBar2.visibility = View.GONE
         }.addOnFailureListener {
             Log.e("DOWNLOAD", "FAILED")
             val defaultImage= storageRef.child("profilePictures/defaultPicture.png")
             defaultImage.downloadUrl.addOnSuccessListener {
-                Picasso.get().load(it).into(binding.profilePicture)
-                binding.profilePicture.visibility = View.VISIBLE
+                Picasso.get().load(it).into(binding.profilePictureButton)
+                binding.profilePictureButton.visibility = View.VISIBLE
                 binding.progressBar2.visibility = View.GONE
             }.addOnFailureListener() {
                 Log.e("DOWNLOAD DEFAULT", "FAILED")
