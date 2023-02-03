@@ -140,6 +140,14 @@ class RightFragment : Fragment() {
             binding.progressBar2.visibility = View.GONE
         }.addOnFailureListener {
             Log.e("DOWNLOAD", "FAILED")
+            val defaultImage= storageRef.child("profilePictures/defaultPicture.png")
+            defaultImage.downloadUrl.addOnSuccessListener {
+                Picasso.get().load(it).into(binding.profilePicture)
+                binding.profilePicture.visibility = View.VISIBLE
+                binding.progressBar2.visibility = View.GONE
+            }.addOnFailureListener() {
+                Log.e("DOWNLOAD DEFAULT", "FAILED")
+            }
         }
     }
 }
