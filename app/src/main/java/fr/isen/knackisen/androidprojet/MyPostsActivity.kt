@@ -1,52 +1,47 @@
-package fr.isen.knackisen.androidprojet.fragment
+package fr.isen.knackisen.androidprojet
 
-import fr.isen.knackisen.androidprojet.adapter.ListPostAdapter
 import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
-import fr.isen.knackisen.androidprojet.AddCommentActivity
-import fr.isen.knackisen.androidprojet.CommentsActivity
-import fr.isen.knackisen.androidprojet.ReactionsManager
+import fr.isen.knackisen.androidprojet.adapter.ListPostAdapter
 import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 import fr.isen.knackisen.androidprojet.data.model.User
-import fr.isen.knackisen.androidprojet.databinding.FragmentLeftBinding
+import fr.isen.knackisen.androidprojet.databinding.ActivityMyPostsBinding
 
-class LeftFragment : Fragment() {
-    private var _binding: FragmentLeftBinding? = null
-    private val binding get() = _binding!!
+
+class MyPostsActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMyPostsBinding
     private lateinit var postContainer: List<Post>
     private lateinit var adapter: ListPostAdapter
     var database = Firebase.database
-    var getUser = Firebase.auth.currentUser
-    val user = User(getUser!!.uid, getUser?.displayName.toString())
     var reactionsManager = ReactionsManager()
+    var currentUserId = ""
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        _binding = FragmentLeftBinding.inflate(inflater, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMyPostsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+
+
+        currentUserId = intent.getStringExtra("UID").toString()
         readDataFromFirebase()
-
-        return binding.root
     }
 
+
     private fun readDataFromFirebase() {
-        val database = Firebase.database
+
+
         database.reference.child("posts").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 postContainer = listOf()
@@ -71,7 +66,12 @@ class LeftFragment : Fragment() {
                         val commentUserId = comment.child("user").child("id").value.toString()
                         val commentUser = User(commentUserId, commentName)
 
-                        commentList.add(Comment(commentId, commentContent, commentUser,Reactions(0,false, listOf())))
+                        commentList.add(
+                            Comment(
+                                commentId, commentContent, commentUser,
+                                Reactions(0, false, listOf())
+                            )
+                        )
                     }
                     if (likes == null) {
                         likes = 0
@@ -79,38 +79,42 @@ class LeftFragment : Fragment() {
                     val reactions = Reactions(likes.toString().toInt(), false, commentList)
 
                     val post = Post(id, content, user, reactions)
+                    if (currentUserId == post.user.id ) {
 
-                    postContainer += post
+                        postContainer += post
+                        recyclerViewRefresh()
+                    }
                 }
-                recyclerViewRefresh()
-
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
             }
         }
     }
 
+
+
+
     private fun recyclerViewRefresh() {
-        val recyclerView = binding.recyclerview
-        recyclerView.layoutManager = LinearLayoutManager(activity)
+        val recyclerView = binding.recyclerviewMyPosts
+        recyclerView.layoutManager = LinearLayoutManager(this)
 
         val toCreateComment = fun (post: Post): Unit {
-            val i = Intent(activity, AddCommentActivity::class.java)
+            val i = Intent(this, AddCommentActivity::class.java)
             i.putExtra("post", Gson().toJson(post))
             startActivity(i)
         }
 
         val onClick = fun (post:Post): Unit {
-            val intent = Intent(activity, CommentsActivity::class.java)
+            val intent = Intent(this, CommentsActivity::class.java)
             intent.putExtra("post", Gson().toJson(post))
             startActivity(intent)
         }
 
-        val onLike = fun (post: Post, button: Button, count:TextView): Unit {
+        val onLike = fun (post: Post, button: Button, count: TextView): Unit {
             reactionsManager.clickLike(post, button, count)
         }
 
-        val checkLike = fun (post: Post, button: Button, count:TextView): Unit {
+        val checkLike = fun (post: Post, button: Button, count: TextView): Unit {
             reactionsManager.checkalreadyliked(post, button, count)
         }
 
@@ -128,8 +132,6 @@ class LeftFragment : Fragment() {
         readDataFromFirebase()
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("onDestroy", "$this onDestroy")
-    }
+
 }
+

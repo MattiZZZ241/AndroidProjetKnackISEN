@@ -20,7 +20,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.LoginActivity
+import fr.isen.knackisen.androidprojet.MyPostsActivity
 import fr.isen.knackisen.androidprojet.PrivateUserInfoActivity
+import fr.isen.knackisen.androidprojet.data.model.User
 import fr.isen.knackisen.androidprojet.data.model.UserInfo
 import fr.isen.knackisen.androidprojet.databinding.FragmentRightBinding
 import java.net.URI
@@ -31,6 +33,8 @@ class RightFragment : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var user : FirebaseUser
     private lateinit var storage : FirebaseStorage
+    private lateinit var userConnected : User
+
     private var UID: String =""
     private var profilePicture: Uri? = null
 
@@ -43,6 +47,8 @@ class RightFragment : Fragment() {
         database= Firebase.database
         user = Firebase.auth.currentUser!!
         storage = Firebase.storage
+
+        userConnected = User(user.uid, user.displayName.toString())
 
         Log.d("UID CHANGED", user.uid)
         UID = user.uid
@@ -58,7 +64,7 @@ class RightFragment : Fragment() {
             startActivity(intent)
         }
 
-        binding.uploadButton.setOnClickListener {
+        binding.profilePictureButton.setOnClickListener {
             val intent = Intent()
                 .setType("image/*")
                 .setAction(Intent.ACTION_GET_CONTENT)
@@ -72,6 +78,12 @@ class RightFragment : Fragment() {
             startActivity(intent)
         }
 
+        binding.MyPostButton.setOnClickListener {
+            val intent = Intent(activity, MyPostsActivity::class.java)
+            intent.putExtra("UID", userConnected.id)
+            startActivity(intent)
+        }
+
         return binding.root
     }
 
@@ -80,7 +92,7 @@ class RightFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == -1) {
             profilePicture = data?.data
-            Picasso.get().load(profilePicture).into(binding.profilePicture)
+            Picasso.get().load(profilePicture).fit().centerCrop().into(binding.profilePictureButton)
         }
     }
 
@@ -130,16 +142,24 @@ class RightFragment : Fragment() {
 
     private fun getProfilePicture()
     {
-        binding.profilePicture.visibility = View.GONE
+        binding.profilePictureButton.visibility = View.GONE
         val storageRef = storage.reference
         val imageRef = storageRef.child("profilePictures/${user.uid}")
         imageRef.downloadUrl.addOnSuccessListener {
             Log.d("DOWNLOAD", "SUCCESS")
-            Picasso.get().load(it).into(binding.profilePicture)
-            binding.profilePicture.visibility = View.VISIBLE
+            Picasso.get().load(it).fit().centerCrop().into(binding.profilePictureButton)
+            binding.profilePictureButton.visibility = View.VISIBLE
             binding.progressBar2.visibility = View.GONE
         }.addOnFailureListener {
             Log.e("DOWNLOAD", "FAILED")
+            val defaultImage= storageRef.child("profilePictures/defaultPicture.png")
+            defaultImage.downloadUrl.addOnSuccessListener {
+                Picasso.get().load(it).into(binding.profilePictureButton)
+                binding.profilePictureButton.visibility = View.VISIBLE
+                binding.progressBar2.visibility = View.GONE
+            }.addOnFailureListener() {
+                Log.e("DOWNLOAD DEFAULT", "FAILED")
+            }
         }
     }
 }
