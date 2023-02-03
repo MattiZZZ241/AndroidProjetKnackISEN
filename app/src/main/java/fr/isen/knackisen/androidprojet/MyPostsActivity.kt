@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import fr.isen.knackisen.androidprojet.adapter.ListPostAdapter
@@ -40,6 +41,7 @@ class MyPostsActivity : AppCompatActivity() {
 
     private fun readDataFromFirebase() {
 
+        Log.d("Database", "start")
         // get post from user post list and add to postContainer
         database.reference.child("users").child(currentUserId).child("posts").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -50,10 +52,13 @@ class MyPostsActivity : AppCompatActivity() {
 
                         if (task2.isSuccessful) {
 
-                                //Log.d("TAG", task2.result.toString())
+                                Log.d("task2", task2.result.toString())
 
                                 val snapshot1 = task2.result!!
-                            
+
+                                // snapshot1 = Snapshot { key = -M9Z5ZQZQZQZQZQZQZQZ, value = {content=Hello, user={name=Test, id=-M9Z5ZQZQZQZQZQZQZQZ}, id=-M9Z5ZQZQZQZQZQZQZQZ} }
+                            Log.d("Database", "Got snapshot: ${snapshot1.value}")
+                                // TODO: Convert it as a Post object
 
 
                               val id = snapshot1.child("id").value.toString()
@@ -84,11 +89,14 @@ class MyPostsActivity : AppCompatActivity() {
                                 if (likes == null) {
                                     likes = 0
                                 }
-                                val reactions = Reactions(likes.toString().toInt(), false, commentList)
+                                    Log.d("Database", "Everything is ok - Middle")
+
+                                    val reactions = Reactions(likes.toString().toInt(), false, commentList)
 
                                 val post = Post(id, content, user, reactions)
 
                                 postContainer += post
+                                Log.d("Database", "PostContainer: $postContainer")
 
                             }
                         } else {
@@ -98,6 +106,7 @@ class MyPostsActivity : AppCompatActivity() {
 
 
     }
+    Log.d("Database", "End - PostContainer: $postContainer")
                 recyclerViewRefresh()
             }}}
 
