@@ -13,6 +13,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -119,6 +120,13 @@ class RightFragment : Fragment() {
         val pushDB = database.getReference("userinfos").child(UID)
         Toast.makeText(activity, "Profile updated", Toast.LENGTH_SHORT).show()
         userInfo.uid=UID
+        val profileName = userProfileChangeRequest {
+            displayName = userInfo.name
+        }
+        user.updateProfile(profileName)
+
+
+
 
         pushDB.setValue(userInfo)
         if (profilePicture != null) {

@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
@@ -35,6 +36,9 @@ class MidFragment : Fragment() {
                 return binding.root
             }
         }
+        if (getUser != null) {
+            Log.e( "User connected: " , getUser.displayName.toString())
+        }
         val user = User(getUser!!.uid, getUser.displayName.toString())
 
         val currentUser = user
@@ -56,6 +60,8 @@ class MidFragment : Fragment() {
 
     private fun prepareData(currentUser: User, key:String, reactions: Reactions): Post {
         val content = binding.inputPost.text.toString()
+        Log.d("Current User POSTING", currentUser.name)
         return Post(key, content, currentUser, reactions)
+
     }
 }
