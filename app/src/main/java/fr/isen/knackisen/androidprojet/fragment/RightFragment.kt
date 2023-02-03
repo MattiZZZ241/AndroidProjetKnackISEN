@@ -20,7 +20,9 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.LoginActivity
+import fr.isen.knackisen.androidprojet.MyPostsActivity
 import fr.isen.knackisen.androidprojet.PrivateUserInfoActivity
+import fr.isen.knackisen.androidprojet.data.model.User
 import fr.isen.knackisen.androidprojet.data.model.UserInfo
 import fr.isen.knackisen.androidprojet.databinding.FragmentRightBinding
 import java.net.URI
@@ -31,6 +33,8 @@ class RightFragment : Fragment() {
     private lateinit var database: FirebaseDatabase
     private lateinit var user : FirebaseUser
     private lateinit var storage : FirebaseStorage
+    private lateinit var userConnected : User
+
     private var UID: String =""
     private var profilePicture: Uri? = null
 
@@ -43,6 +47,8 @@ class RightFragment : Fragment() {
         database= Firebase.database
         user = Firebase.auth.currentUser!!
         storage = Firebase.storage
+
+        userConnected = User(user.uid, user.displayName.toString())
 
         Log.d("UID CHANGED", user.uid)
         UID = user.uid
@@ -69,6 +75,12 @@ class RightFragment : Fragment() {
         binding.logoutCreatpost.setOnClickListener {
             Firebase.auth.signOut()
             val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.MyPostButton.setOnClickListener {
+            val intent = Intent(activity, MyPostsActivity::class.java)
+            intent.putExtra("UID", userConnected.id)
             startActivity(intent)
         }
 
