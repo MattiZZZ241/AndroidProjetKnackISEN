@@ -42,7 +42,7 @@ class FormInfoUserActivity : AppCompatActivity() {
                 Toast.makeText(this, "Please fill all the fields", Toast.LENGTH_SHORT).show()
             } else {
                 val radioButton = binding.radioGroupFUIA.findViewById<RadioButton>(binding.radioGroupFUIA.checkedRadioButtonId)
-                updateData(UserInfo(binding.userInfoNameFIUA.text.toString(), binding.userInfoAgeFIUA.text.toString().toInt(),"",radioButton.text.toString()))
+                updateData(UserInfo( binding.userInfoAgeFIUA.text.toString().toInt(),radioButton.text.toString()))
             }
         }
 
@@ -56,7 +56,7 @@ class FormInfoUserActivity : AppCompatActivity() {
         pushDB.setValue(userInfo)
 
         val profileName = userProfileChangeRequest {
-            displayName = userInfo.name
+            displayName = binding.userInfoNameFIUA.text.toString()
         }
         user.updateProfile(profileName)
 
