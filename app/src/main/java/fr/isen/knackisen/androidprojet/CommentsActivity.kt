@@ -58,6 +58,8 @@ class CommentsActivity : AppCompatActivity() {
         }
 
 
+
+
         binding.nameUserPostView.text = parentPost.user.name
         binding.contentPostView.text = parentPost.content
         binding.likesCount.text = parentPost.reactions.like.toString()
@@ -68,7 +70,7 @@ class CommentsActivity : AppCompatActivity() {
             reactionsManager.clickLike(parentPost, binding.likeButton,binding.likesCount)
         }
 
-
+        getProfilePicture(parentPost.user.id, binding.imagePostView)
 
 
         subToComments(parentPost)

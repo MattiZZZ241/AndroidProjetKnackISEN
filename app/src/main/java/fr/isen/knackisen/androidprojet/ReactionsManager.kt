@@ -78,11 +78,17 @@ class ReactionsManager() {
     }
 
     fun checkalreadyliked(parent: Post, likeButton: Button, likeCount: TextView) {
-        val currentId = parent.id
-        val ref = database.getReference("users/${user.id}/idlike/${currentId}")
-            ref.get().addOnSuccessListener {
-                Log.d("it", it.toString())
 
+
+
+
+        // put "[-NNLdVxNlfGAPuQSLS-7, -NNLgl8d6NB-l6a8XU9L]" or "-NNLgl8d6NB-l6a8XU9L" in porentId as a list of string
+        var parentID:List<String> = parent.id.replace("[", "").replace("]", "").split(", ")
+
+
+        val currentId = parentID.last()
+        val ref = database.getReference("users/${user.id}/idlike/${currentId}")
+            ref.get().addOnSuccessListener {s
                     if (it != null && it.value != null) {
                         likeButton.text = "Unlike"
                         likeCount.text = parent.reactions.like.toString()
