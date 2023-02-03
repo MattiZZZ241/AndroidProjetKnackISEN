@@ -90,12 +90,12 @@ class CommentsActivity : AppCompatActivity() {
         }
 
         val onLike = fun (post: Post, button: Button, count:TextView): Unit {
-          //  reactionsManager.clickLike(post, button, count)
+            reactionsManager.clickLike(post, button, count)
         }
 
         val checkLike = fun (post: Post, button: Button, count:TextView): Unit {
               // var reactions = Reactions(0, false, listOf())
-            //  reactionsManager.checkalreadyliked(post, button, count)
+              reactionsManager.checkalreadyliked(post, button, count)
         }
         val onComment = fun (post:Post): Unit {
             val intent = Intent(this@CommentsActivity, CommentsActivity::class.java)
@@ -140,6 +140,7 @@ class CommentsActivity : AppCompatActivity() {
                     val name = snapshot.child("user").child("name").value.toString()
                     val userId = snapshot.child("user").child("id").value.toString()
                     val user = User(userId, name)
+
                     val comment = Post(id, content, user, Reactions(0,false, listOf()))
                     listComment += comment
                 }
