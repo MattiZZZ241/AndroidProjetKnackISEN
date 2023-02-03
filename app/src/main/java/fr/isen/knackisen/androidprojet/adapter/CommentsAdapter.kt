@@ -13,9 +13,9 @@ import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 
-class CommentsAdapter (var list: List<Comment>, val toCreateComment: (String)-> Unit, val likeAction: (Comment, Button, TextView) -> Unit, val checkLike: (Comment, Button, TextView) -> Unit) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
+class CommentsAdapter (var list: List<Post>, val toCreateComment: (String)-> Unit, val likeAction: (Post, Button, TextView) -> Unit, val checkLike: (Post, Button, TextView) -> Unit) : RecyclerView.Adapter<CommentsAdapter.CommentsViewHolder>() {
 
-    fun updateList(newList: List<Comment>) {
+    fun updateList(newList: List<Post>) {
         list = newList
         notifyDataSetChanged()
     }

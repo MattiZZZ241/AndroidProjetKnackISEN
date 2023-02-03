@@ -22,7 +22,7 @@ class AddCommentActivity : AppCompatActivity() {
     private lateinit var userReference: DatabaseReference
 
     private lateinit var database: FirebaseDatabase
-    private lateinit var listComment: List<Comment>
+    private lateinit var listComment: List<Post>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +58,7 @@ class AddCommentActivity : AppCompatActivity() {
                     var userId = snapshot.child("user").child("id").value.toString()
 
                     var user = User(userId, name)
-                    var comment = Comment(id, content, user, Reactions(0,false, listOf()))
+                    var comment = Post(id, content, user, Reactions(0,false, listOf()))
                     listComment += comment
                 }
             } else {
@@ -102,7 +102,7 @@ class AddCommentActivity : AppCompatActivity() {
             }
 
             var idComment = (parentID + key).toString()
-            val comment = Comment(idComment, commentBody, user,Reactions(0,false, listOf()))
+            val comment = Post(idComment, commentBody, user,Reactions(0,false, listOf()))
 
             postReference.child("reactions").child("comments").child(key).setValue(comment)
             commentsReference.child(key).setValue(comment)

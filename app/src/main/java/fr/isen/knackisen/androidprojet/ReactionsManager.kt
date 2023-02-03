@@ -67,7 +67,7 @@ class ReactionsManager() {
                     }
                 }
         }
-        else if (parent is Comment) {
+        else if (parent is Post /*Comment*/) {
             var split = parent.id.split("[", "]")[1]
             split = split.split(", ")[1]
 
@@ -124,7 +124,7 @@ class ReactionsManager() {
                     }
                 }
         }
-        else if (parent is Comment) {
+        else if (parent is Post /*Comment*/) {
             var split = parent.id.split("[", "]")[1]
             split = split.split(", ")[1]
 
