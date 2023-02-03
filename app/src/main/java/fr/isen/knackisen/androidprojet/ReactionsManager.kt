@@ -88,7 +88,7 @@ class ReactionsManager() {
 
         val currentId = parentID.last()
         val ref = database.getReference("users/${user.id}/idlike/${currentId}")
-            ref.get().addOnSuccessListener {s
+            ref.get().addOnSuccessListener {
                     if (it != null && it.value != null) {
                         likeButton.text = "Unlike"
                         likeCount.text = parent.reactions.like.toString()

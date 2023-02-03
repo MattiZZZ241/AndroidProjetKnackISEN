@@ -4,12 +4,15 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 import fr.isen.knackisen.androidprojet.data.model.User
@@ -75,6 +78,10 @@ class AddCommentActivity : AppCompatActivity() {
         binding.contentPostView.text = parentPost.content
         binding.likesCount.text = parentPost.reactions.like.toString()
 
+        getProfilePicture(parentPost.user.id, binding.imagePostView)
+
+
+
         binding.likeButton.setOnClickListener() {
             if(parentPost.reactions.userLiked) {
                 parentPost.reactions.like -= 1
@@ -117,5 +124,14 @@ class AddCommentActivity : AppCompatActivity() {
         }
     }
 
-
+    private fun getProfilePicture(id: String, imageView: ImageView) {
+        val storage = Firebase.storage.reference
+        val imageRef = storage.child("profilePictures/${id}")
+        imageRef.downloadUrl.addOnSuccessListener {
+            Log.d("IMAGE", it.toString())
+            Picasso.get().load(it).into(imageView)
+        }.addOnFailureListener {
+            Log.d("IMAGE", "error")
+        }
+    }
 }
