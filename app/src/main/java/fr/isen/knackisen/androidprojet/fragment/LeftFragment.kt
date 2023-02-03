@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.google.gson.Gson
 import fr.isen.knackisen.androidprojet.AddCommentActivity
 import fr.isen.knackisen.androidprojet.CommentsActivity
@@ -30,6 +31,7 @@ class LeftFragment : Fragment() {
     private lateinit var adapter: ListPostAdapter
     var database = Firebase.database
     var getUser = Firebase.auth.currentUser
+    var storage = Firebase.storage.reference
     val user = User(getUser!!.uid, getUser?.displayName.toString())
     var reactionsManager = ReactionsManager()
 
@@ -120,6 +122,17 @@ class LeftFragment : Fragment() {
         postContainer = postContainer.reversed()
 
         adapter.refreshList(postContainer)
+    }
+
+    private fun getProfilePicture(id: String) {
+        val storage = Firebase.storage.reference
+        val imageRef = storage.child("profilePictures/${id}")
+        imageRef.downloadUrl.addOnSuccessListener {
+            Log.d("IMAGE", it.toString())
+            
+        }.addOnFailureListener {
+            Log.d("IMAGE", "error")
+        }
     }
 
     override fun onResume() {
