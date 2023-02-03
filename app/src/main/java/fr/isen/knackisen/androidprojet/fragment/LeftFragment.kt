@@ -81,7 +81,6 @@ class LeftFragment : Fragment() {
                     val post = Post(id, content, user, reactions)
 
                     postContainer += post
-                    Log.d("Post List", postContainer.toString())
                 }
                 recyclerViewRefresh()
 

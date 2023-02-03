@@ -68,22 +68,26 @@ class CommentsActivity : AppCompatActivity() {
         }
        // var commentList = listOf(Comment("test","This is the message", User(1, "Serg")),Comment("id","Another message", User(2, "L'autre")))
 
-        val toCreateComment = fun (ids: String): Unit {
+        val toCreateComment = fun (post: Post): Unit {
             val i = Intent(this@CommentsActivity, AddCommentActivity::class.java)
-            i.putExtra("id", ids)
+            i.putExtra("post", Gson().toJson(post))
             startActivity(i)
         }
 
         val onLike = fun (post: Post, button: Button, count:TextView): Unit {
-            reactionsManager.clickLike(post, button, count)
+          //  reactionsManager.clickLike(post, button, count)
         }
 
         val checkLike = fun (post: Post, button: Button, count:TextView): Unit {
-            reactionsManager.checkalreadyliked(post, button, count)
+              // var reactions = Reactions(0, false, listOf())
+            //  reactionsManager.checkalreadyliked(post, button, count)
         }
-        Log.d("list comment", listComment.toString())
-
-        commentsAdapter = CommentsAdapter(listComment, toCreateComment, onLike, checkLike)
+        val onComment = fun (post:Post): Unit {
+            val intent = Intent(this@CommentsActivity, CommentsActivity::class.java)
+            intent.putExtra("post", Gson().toJson(post))
+            startActivity(intent)
+        }
+        commentsAdapter = CommentsAdapter(listComment, toCreateComment, onLike, onComment, checkLike)
         binding.listComments.adapter = commentsAdapter
         binding.listComments.layoutManager = LinearLayoutManager(this)
         binding.commentButton.setOnClickListener { newComment() }

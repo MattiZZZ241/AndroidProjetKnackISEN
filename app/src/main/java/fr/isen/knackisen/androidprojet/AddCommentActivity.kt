@@ -1,5 +1,6 @@
 package fr.isen.knackisen.androidprojet
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -43,11 +44,12 @@ class AddCommentActivity : AppCompatActivity() {
             finish()
         }
         var parentPost: Post = Gson().fromJson(postString, Post::class.java)
-        var parentID:List<String> = parentPost.id.split(",").map { it.trim() }
+        // put "[-NNLdVxNlfGAPuQSLS-7, -NNLgl8d6NB-l6a8XU9L]" or "-NNLgl8d6NB-l6a8XU9L" in porentId as a list of string
+        var parentID:List<String> = listOf(parentPost.id.replace("[", "").replace("]", ""))
         for(id in parentID) {
-            currentPostRef = currentPostRef.child(id).child("comments")
+            currentPostRef = currentPostRef.child(id).child("reactions").child("comments")
         }
-        currentPostRef= currentPostRef.parent!!
+        currentPostRef= currentPostRef.parent!!.parent!!
         currentPostRef.get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 listComment = listOf()
@@ -81,6 +83,7 @@ class AddCommentActivity : AppCompatActivity() {
             currentPostRef.child("reactions").child("like").setValue(parentPost.reactions.like)
             binding.likesCount.text = parentPost.reactions.like.toString()
         }
+
 
         binding.postButton.setOnClickListener( ) {
             // post to the Real time database (firebase)

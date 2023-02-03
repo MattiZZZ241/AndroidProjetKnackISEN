@@ -25,15 +25,15 @@ class ReactionsManager() {
         likeCount: TextView
     ) {
 
-        val idList: List<String> = parent.id.split(",").map { it.trim() }
-
+        val idList: List<String> = listOf(parent.id.replace("[", "").replace("]", ""))
+        Log.d("idList", idList.toString())
         // get the reference of the post
         var postRef = database.getReference("posts")
         for (id in idList) {
             postRef = postRef.child(id).child("reactions").child("comments")
         }
         postRef = postRef.parent!!.parent!!
-        Log.d("idList", idList.toString())
+
         Log.d("postRef", postRef.toString())
 
             //get reactionstate from database
