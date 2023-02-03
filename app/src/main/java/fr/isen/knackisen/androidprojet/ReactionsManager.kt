@@ -75,14 +75,14 @@ class ReactionsManager() {
 
                     }
                 }
-
-
-
     }
 
     fun checkalreadyliked(parent: Post, likeButton: Button, likeCount: TextView) {
-        val currentId = parent.id.split(",").last().replace("]", "").replace(" ", "")
-            database.getReference("users/${user.id}/idlike/'${currentId}'").get().addOnSuccessListener {
+        val currentId = parent.id
+        val ref = database.getReference("users/${user.id}/idlike/${currentId}")
+            ref.get().addOnSuccessListener {
+                Log.d("it", it.toString())
+
                     if (it != null && it.value != null) {
                         likeButton.text = "Unlike"
                         likeCount.text = parent.reactions.like.toString()
