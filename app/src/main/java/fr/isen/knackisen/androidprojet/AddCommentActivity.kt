@@ -45,10 +45,13 @@ class AddCommentActivity : AppCompatActivity() {
         }
         var parentPost: Post = Gson().fromJson(postString, Post::class.java)
         // put "[-NNLdVxNlfGAPuQSLS-7, -NNLgl8d6NB-l6a8XU9L]" or "-NNLgl8d6NB-l6a8XU9L" in porentId as a list of string
-        var parentID:List<String> = listOf(parentPost.id.replace("[", "").replace("]", ""))
+        var parentID:List<String> = parentPost.id.replace("[", "").replace("]", "").split(", ")
+        Log.d("Comment", "Parent IDs: $parentID")
         for(id in parentID) {
+            Log.d("Comment", "Parent ID: $id")
             currentPostRef = currentPostRef.child(id).child("reactions").child("comments")
         }
+        Log.d("Comment", "Current post ref - Start: $currentPostRef")
         currentPostRef= currentPostRef.parent!!.parent!!
         currentPostRef.get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
@@ -106,7 +109,7 @@ class AddCommentActivity : AppCompatActivity() {
 
             var idComment = (parentID + key).toString()
             val comment = Post(idComment, commentBody, user,Reactions(0,false, listOf()))
-
+            Log.d("Comment", "currentPostRef: $currentPostRef")
             currentPostRef.child("reactions").child("comments").child(key).setValue(comment)
             userReference.child(user.id).child("comments").child(key).setValue(comment)
 

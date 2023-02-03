@@ -1,6 +1,5 @@
 package fr.isen.knackisen.androidprojet.fragment
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,8 +10,6 @@ import androidx.fragment.app.Fragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import fr.isen.knackisen.androidprojet.LoginActivity
-import fr.isen.knackisen.androidprojet.data.model.Comment
 import fr.isen.knackisen.androidprojet.data.model.Post
 import fr.isen.knackisen.androidprojet.data.model.Reactions
 import fr.isen.knackisen.androidprojet.data.model.User
@@ -42,7 +39,7 @@ class MidFragment : Fragment() {
         val user = User(getUser!!.uid, getUser.displayName.toString())
 
         val currentUser = user
-        val comments: List<Post> = listOf(Post("1", "Example Comment", currentUser,Reactions(0,false, listOf())))
+        val comments: List<Post> = listOf()
         val reactions = Reactions(0, false, comments)
 
         val key = database.push().key
