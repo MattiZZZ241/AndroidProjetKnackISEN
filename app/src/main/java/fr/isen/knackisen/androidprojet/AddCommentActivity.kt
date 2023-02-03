@@ -108,7 +108,6 @@ class AddCommentActivity : AppCompatActivity() {
             val comment = Post(idComment, commentBody, user,Reactions(0,false, listOf()))
 
             currentPostRef.child("reactions").child("comments").child(key).setValue(comment)
-            commentReference.child(key).setValue(comment)
             userReference.child(user.id).child("comments").child(key).setValue(comment)
 
             finish()
