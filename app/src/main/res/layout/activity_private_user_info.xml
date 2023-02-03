@@ -12,13 +12,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="Your old password"
         android:inputType="textPassword"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/infoCurrentPassword"
-        app:layout_constraintTop_toBottomOf="@+id/infoCurrentPassword"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/infoCurrentPassword" />
 
     <TextView
         android:id="@+id/infoNewPassword"
@@ -60,6 +57,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="Your new password"
         android:inputType="textPassword"
         app:layout_constraintStart_toStartOf="@+id/infoNewPassword"
         app:layout_constraintTop_toBottomOf="@+id/infoNewPassword" />
@@ -82,8 +80,33 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:ems="10"
+        android:hint="Write your email"
         android:inputType="textEmailAddress"
         app:layout_constraintStart_toStartOf="@+id/infoEmail"
         app:layout_constraintTop_toBottomOf="@+id/infoEmail" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Modify your details"
+        android:textColor="@color/sausage_orange"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toEndOf="@+id/textView6"
+        app:layout_constraintTop_toTopOf="@+id/textView6"
+        app:srcCompat="@drawable/sausage_web" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

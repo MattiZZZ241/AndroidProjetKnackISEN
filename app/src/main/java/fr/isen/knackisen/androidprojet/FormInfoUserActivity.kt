@@ -50,6 +50,7 @@ class FormInfoUserActivity : AppCompatActivity() {
         userInfo.uid=UID
         pushDB.setValue(userInfo)
 
-        //TODO intent
+        val intent = Intent(this@FormInfoUserActivity, MainActivity::class.java)
+        startActivity(intent)
     }
 }
