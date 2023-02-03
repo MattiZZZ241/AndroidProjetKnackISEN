@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseUser
@@ -23,6 +24,7 @@ import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.LoginActivity
 import fr.isen.knackisen.androidprojet.MyPostsActivity
 import fr.isen.knackisen.androidprojet.PrivateUserInfoActivity
+import fr.isen.knackisen.androidprojet.R
 import fr.isen.knackisen.androidprojet.data.model.User
 import fr.isen.knackisen.androidprojet.data.model.UserInfo
 import fr.isen.knackisen.androidprojet.databinding.FragmentRightBinding
@@ -57,7 +59,7 @@ class RightFragment : Fragment() {
         loadData()
 
         binding.button.setOnClickListener {
-            updateData(UserInfo(binding.userInfoAge.text.toString().toInt()))
+            updateData(UserInfo(binding.userInfoAge.text.toString().toInt(), binding.radioGroupFUIA.findViewById<RadioButton>(binding.radioGroupFUIA.checkedRadioButtonId).text.toString()))
         }
 
         binding.privateInfos.setOnClickListener {
@@ -103,11 +105,17 @@ class RightFragment : Fragment() {
                 val userInfo = task.result?.getValue(UserInfo::class.java)
                 binding.userInfoAge.setText(userInfo?.age.toString())
                 binding.userInfoName.setText(user.displayName)
+                val genre = userInfo?.genre.toString()
                 if (binding.userInfoAge.text.toString() == "null") {
                     binding.userInfoAge.setText("")
                 }
                 if (binding.userInfoName.text.toString() == "null") {
                     binding.userInfoName.setText("")
+                }
+                when (genre) {
+                    "Pork" -> binding.radioGroupFUIA.check(R.id.radioButton_porc)
+                    "Chicken" -> binding.radioGroupFUIA.check(R.id.radioButton_poulet)
+                    "Vegan" -> binding.radioGroupFUIA.check(R.id.radioButton_vegi)
                 }
             } else {
                 Log.d("VALUE", task.exception?.message.toString())
@@ -124,9 +132,6 @@ class RightFragment : Fragment() {
             displayName = binding.userInfoName.text.toString()
         }
         user.updateProfile(profileName)
-
-
-
 
         pushDB.setValue(userInfo)
         if (profilePicture != null) {
