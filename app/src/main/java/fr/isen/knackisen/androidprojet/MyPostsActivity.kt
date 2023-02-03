@@ -7,7 +7,6 @@ import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
@@ -41,55 +40,66 @@ class MyPostsActivity : AppCompatActivity() {
 
     private fun readDataFromFirebase() {
 
-
-        database.reference.child("posts").get().addOnCompleteListener() { task ->
+        // get post from user post list and add to postContainer
+        database.reference.child("users").child(currentUserId).child("posts").get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 postContainer = listOf()
                 for (snapshot in task.result!!.children) {
+                    val postId = snapshot.value.toString()
+                    database.reference.child("posts").child(postId).get().addOnCompleteListener() { task2 ->
 
-                    val id = snapshot.child("id").value.toString()
-                    val content = snapshot.child("content").value.toString()
+                        if (task2.isSuccessful) {
 
-                    val name = snapshot.child("user").child("name").value.toString()
-                    val userId = snapshot.child("user").child("id").value.toString()
-                    val user = User(userId, name)
-                    var likes = snapshot.child("reactions").child("like").value
+                                //Log.d("TAG", task2.result.toString())
+
+                                val snapshot1 = task2.result!!
+                            
 
 
-                    // get comment list
-                    val commentList = mutableListOf<Comment>()
-                    for (comment in snapshot.child("comments").children) {
-                        val commentId = comment.child("id").value.toString()
-                        val commentContent = comment.child("content").value.toString()
+                              val id = snapshot1.child("id").value.toString()
+                                val content = snapshot1.child("content").value.toString()
 
-                        val commentName = comment.child("user").child("name").value.toString()
-                        val commentUserId = comment.child("user").child("id").value.toString()
-                        val commentUser = User(commentUserId, commentName)
+                                val name = snapshot1.child("user").child("name").value.toString()
+                                val userId = snapshot1.child("user").child("id").value.toString()
+                                val user = User(userId, name)
+                                var likes = snapshot1.child("reactions").child("like").value
 
-                        commentList.add(
-                            Comment(
-                                commentId, commentContent, commentUser,
-                                Reactions(0, false, listOf())
-                            )
-                        )
-                    }
-                    if (likes == null) {
-                        likes = 0
-                    }
-                    val reactions = Reactions(likes.toString().toInt(), false, commentList)
 
-                    val post = Post(id, content, user, reactions)
-                    if (currentUserId == post.user.id ) {
+                                // get comment list
+                                val commentList = mutableListOf<Comment>()
+                                for (comment in snapshot1.child("comments").children) {
+                                    val commentId = comment.child("id").value.toString()
+                                    val commentContent = comment.child("content").value.toString()
 
-                        postContainer += post
-                        recyclerViewRefresh()
-                    }
-                }
-            } else {
-                Log.d("VALUE", task.exception?.message.toString())
-            }
+                                    val commentName = comment.child("user").child("name").value.toString()
+                                    val commentUserId = comment.child("user").child("id").value.toString()
+                                    val commentUser = User(commentUserId, commentName)
+
+                                    commentList.add(
+                                        Comment(
+                                            commentId, commentContent, commentUser,
+                                            Reactions(0, false, listOf())
+                                        )
+                                    )
+                                if (likes == null) {
+                                    likes = 0
+                                }
+                                val reactions = Reactions(likes.toString().toInt(), false, commentList)
+
+                                val post = Post(id, content, user, reactions)
+
+                                postContainer += post
+
+                            }
+                        } else {
+                            Log.d("VALUE", task.exception?.message.toString())
+                        }
         }
+
+
     }
+                recyclerViewRefresh()
+            }}}
 
 
 
@@ -131,7 +141,6 @@ class MyPostsActivity : AppCompatActivity() {
         super.onResume()
         readDataFromFirebase()
     }
-
 
 }
 

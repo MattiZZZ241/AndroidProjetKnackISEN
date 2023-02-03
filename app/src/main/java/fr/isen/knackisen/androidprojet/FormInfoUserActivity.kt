@@ -45,7 +45,7 @@ class FormInfoUserActivity : AppCompatActivity() {
 
 
     private fun updateData(userInfo: UserInfo){
-        val pushDB = database.getReference("userinfos").child(UID)
+        val pushDB = database.getReference("posts").child(UID)
         Toast.makeText(this, "Profile updated", Toast.LENGTH_SHORT).show()
         userInfo.uid=UID
         pushDB.setValue(userInfo)

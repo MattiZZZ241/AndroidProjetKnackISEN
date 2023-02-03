@@ -62,7 +62,6 @@ class ListPostAdapter(private var list: List<Post>, private val OnItemClickListe
         notifyDataSetChanged()
     }
 
-
     // return the number of the items in the list
     override fun getItemCount(): Int = list.size
 

@@ -50,6 +50,9 @@ class MidFragment : Fragment() {
         binding.buttonPost.setOnClickListener {
             val post = prepareData(currentUser, key, reactions)
             database.child(key).setValue(post)
+
+            Firebase.database.getReference("users").child(user.id).child("posts").child(key)
+                .setValue(key)
         }
         return binding.root
     }
