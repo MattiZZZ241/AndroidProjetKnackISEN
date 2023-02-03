@@ -57,7 +57,7 @@ class MyPostsActivity : AppCompatActivity() {
 
 
                     // get comment list
-                    val commentList = mutableListOf<Comment>()
+                    val commentList = mutableListOf<Post>()
                     for (comment in snapshot.child("comments").children) {
                         val commentId = comment.child("id").value.toString()
                         val commentContent = comment.child("content").value.toString()
@@ -67,7 +67,7 @@ class MyPostsActivity : AppCompatActivity() {
                         val commentUser = User(commentUserId, commentName)
 
                         commentList.add(
-                            Comment(
+                            Post(
                                 commentId, commentContent, commentUser,
                                 Reactions(0, false, listOf())
                             )
