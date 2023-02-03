@@ -45,48 +45,63 @@ class LeftFragment : Fragment() {
     }
 
     private fun readDataFromFirebase() {
+
+
         val database = Firebase.database
-        database.reference.child("posts").get().addOnCompleteListener() { task ->
-            if (task.isSuccessful) {
-                postContainer = listOf()
-                for (snapshot in task.result!!.children) {
 
-                    val id = snapshot.child("id").value.toString()
-                    val content = snapshot.child("content").value.toString()
+        database.reference.child("users").child(user.id).get().addOnCompleteListener() {
+            if (it.isSuccessful) {
+                val listLike = (it.result?.child("idlike")?.value.toString()).replace("[", "").replace("]", "").split(", ")
 
-                    val name = snapshot.child("user").child("name").value.toString()
-                    val userId = snapshot.child("user").child("id").value.toString()
-                    val user = User(userId, name)
-                    var likes = snapshot.child("reactions").child("like").value
+                database.reference.child("posts").get().addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
+                        postContainer = listOf()
+                        for (snapshot in task.result!!.children) {
 
+                            val id = snapshot.child("id").value.toString()
+                            val content = snapshot.child("content").value.toString()
 
-                    // get comment list
-                    val commentList = mutableListOf<Post>()
-                    for (comment in snapshot.child("comments").children) {
-                        val commentId = comment.child("id").value.toString()
-                        val commentContent = comment.child("content").value.toString()
+                            val name = snapshot.child("user").child("name").value.toString()
+                            val userId = snapshot.child("user").child("id").value.toString()
+                            val user = User(userId, name)
+                            var likes = snapshot.child("reactions").child("like").value
 
-                        val commentName = comment.child("user").child("name").value.toString()
-                        val commentUserId = comment.child("user").child("id").value.toString()
-                        val commentUser = User(commentUserId, commentName)
+                           var isLiked = listLike.contains(id)
 
-                        commentList.add(Post(commentId, commentContent, commentUser,Reactions(0,false, listOf())))
+                            // get comment list
+                            val commentList = mutableListOf<Post>()
+                            for (comment in snapshot.child("comments").children) {
+                                val commentId = comment.child("id").value.toString()
+                                val commentContent = comment.child("content").value.toString()
+
+                                val commentName = comment.child("user").child("name").value.toString()
+                                val commentUserId = comment.child("user").child("id").value.toString()
+                                val commentUser = User(commentUserId, commentName)
+
+                                commentList.add(Post(commentId, commentContent, commentUser,Reactions(0,false, listOf())))
+                            }
+                            if (likes == null) {
+                                likes = 0
+                            }
+                            val reactions = Reactions(likes.toString().toInt(), isLiked, commentList)
+
+                            val post = Post(id, content, user, reactions)
+
+                            postContainer += post
+                        }
+                        recyclerViewRefresh()
+
+                    } else {
+                        Log.d("VALUE", task.exception?.message.toString())
                     }
-                    if (likes == null) {
-                        likes = 0
-                    }
-                    val reactions = Reactions(likes.toString().toInt(), false, commentList)
-
-                    val post = Post(id, content, user, reactions)
-
-                    postContainer += post
                 }
-                recyclerViewRefresh()
-
-            } else {
-                Log.d("VALUE", task.exception?.message.toString())
+                if (user != null) {
+                    Log.e("User", user.toString())
+                }
             }
         }
+
+
     }
 
     private fun recyclerViewRefresh() {
