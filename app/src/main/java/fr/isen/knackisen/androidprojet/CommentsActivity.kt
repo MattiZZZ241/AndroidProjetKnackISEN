@@ -124,11 +124,6 @@ class CommentsActivity : AppCompatActivity() {
                     val comment = Post(id, content, user, Reactions(0,false, listOf()))
                     listComment += comment
                 }
-                listComment = listComment.drop(1)
-                //list without first post
-
-
-
 
                 commentsAdapter.refreshList(listComment )
             } else {

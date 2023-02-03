@@ -39,7 +39,7 @@ class MidFragment : Fragment() {
         val user = User(getUser!!.uid, getUser.displayName.toString())
 
         val currentUser = user
-        val comments: List<Post> = listOf(Post("1", "Example Comment", currentUser,Reactions(0,false, listOf())))
+        val comments: List<Post> = listOf()
         val reactions = Reactions(0, false, comments)
 
         val key = database.push().key
