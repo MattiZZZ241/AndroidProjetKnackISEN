@@ -70,7 +70,6 @@ class LeftFragment : Fragment() {
                     }
                     val reactions = Reactions(likes.toString().toInt(), false, commentList)
 
-                    Log.d("TMAIAIAIAIAIAIAIAG", "readDataFromFirebase: $id $content $user $reactions")
                     val post = Post(id, content, user, reactions)
 
                     postContainer += post
@@ -117,6 +116,8 @@ class LeftFragment : Fragment() {
         adapter = ListPostAdapter(arrayListOf(), onClick, toCreateComment, onLike)
         recyclerView.adapter = adapter
 
+        // mettre dans le bon ordre les posts (plus récent en premier)
+        postContainer = postContainer.reversed()
 
         adapter.refreshList(postContainer)
     }

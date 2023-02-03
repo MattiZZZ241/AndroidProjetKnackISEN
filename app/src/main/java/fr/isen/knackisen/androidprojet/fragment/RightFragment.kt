@@ -1,9 +1,12 @@
 package fr.isen.knackisen.androidprojet.fragment
 
+
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.RoundedCorner
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -13,17 +16,23 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
+import com.squareup.picasso.Picasso
 import fr.isen.knackisen.androidprojet.LoginActivity
 import fr.isen.knackisen.androidprojet.PrivateUserInfoActivity
 import fr.isen.knackisen.androidprojet.data.model.UserInfo
 import fr.isen.knackisen.androidprojet.databinding.FragmentRightBinding
+import java.net.URI
 
 class RightFragment : Fragment() {
     private var _binding: FragmentRightBinding? = null
     private val binding get() = _binding!!
     private lateinit var database: FirebaseDatabase
     private lateinit var user : FirebaseUser
+    private lateinit var storage : FirebaseStorage
     private var UID: String =""
+    private var profilePicture: Uri? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -33,10 +42,49 @@ class RightFragment : Fragment() {
 
         database= Firebase.database
         user = Firebase.auth.currentUser!!
+        storage = Firebase.storage
 
         Log.d("UID CHANGED", user.uid)
         UID = user.uid
+        getProfilePicture()
+        loadData()
 
+        binding.button.setOnClickListener {
+            updateData(UserInfo(binding.userInfoName.text.toString(), binding.userInfoAge.text.toString().toInt()))
+        }
+
+        binding.privateInfos.setOnClickListener {
+            val intent = Intent(activity, PrivateUserInfoActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding.uploadButton.setOnClickListener {
+            val intent = Intent()
+                .setType("image/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+            startActivityForResult(Intent.createChooser(intent,"Choose a file"), 100)
+
+        }
+
+        binding.logoutCreatpost.setOnClickListener {
+            Firebase.auth.signOut()
+            val intent = Intent(activity, LoginActivity::class.java)
+            startActivity(intent)
+        }
+
+        return binding.root
+    }
+
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 100 && resultCode == -1) {
+            profilePicture = data?.data
+            Picasso.get().load(profilePicture).into(binding.profilePicture)
+        }
+    }
+
+    private fun loadData(){
         database.getReference("userinfos").child(UID).get().addOnCompleteListener() { task ->
             if (task.isSuccessful) {
                 val userInfo = task.result?.getValue(UserInfo::class.java)
@@ -52,24 +100,8 @@ class RightFragment : Fragment() {
                 Log.d("VALUE", task.exception?.message.toString())
             }
         }
-
-        binding.button.setOnClickListener {
-            updateData(UserInfo(binding.userInfoName.text.toString(), binding.userInfoAge.text.toString().toInt()))
-        }
-
-        binding.privateInfos.setOnClickListener {
-            val intent = Intent(activity, PrivateUserInfoActivity::class.java)
-            startActivity(intent)
-        }
-
-        binding.logoutCreatpost.setOnClickListener {
-            Firebase.auth.signOut()
-            val intent = Intent(activity, LoginActivity::class.java)
-            startActivity(intent)
-        }
-
-        return binding.root
     }
+
 
     private fun updateData(userInfo: UserInfo){
         val pushDB = database.getReference("userinfos").child(UID)
@@ -77,5 +109,37 @@ class RightFragment : Fragment() {
         userInfo.uid=UID
 
         pushDB.setValue(userInfo)
+        if (profilePicture != null) {
+            uploadProfilePicture(profilePicture!!)
+        }
+
+    }
+
+    private fun uploadProfilePicture(selectedFile: Uri){
+
+
+        val storageRef = storage.reference
+        val imageRef = storageRef.child("profilePictures/${user.uid}")
+        val uploadTask = imageRef.putFile(selectedFile)
+        uploadTask.addOnFailureListener {
+            Log.e("UPLOAD", "FAILED")
+        }.addOnSuccessListener {
+            Log.d("UPLOAD", "SUCCESS")
+        }
+    }
+
+    private fun getProfilePicture()
+    {
+        binding.profilePicture.visibility = View.GONE
+        val storageRef = storage.reference
+        val imageRef = storageRef.child("profilePictures/${user.uid}")
+        imageRef.downloadUrl.addOnSuccessListener {
+            Log.d("DOWNLOAD", "SUCCESS")
+            Picasso.get().load(it).into(binding.profilePicture)
+            binding.profilePicture.visibility = View.VISIBLE
+            binding.progressBar2.visibility = View.GONE
+        }.addOnFailureListener {
+            Log.e("DOWNLOAD", "FAILED")
+        }
     }
 }

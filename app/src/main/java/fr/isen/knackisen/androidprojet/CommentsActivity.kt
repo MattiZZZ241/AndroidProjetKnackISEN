@@ -35,30 +35,38 @@ class CommentsActivity : AppCompatActivity() {
         listComment = listOf()
         database = Firebase.database
 
-        var postString = intent.getStringExtra("post")
+        val postString = intent.getStringExtra("post")
         parentPost = Gson().fromJson(postString, Post::class.java)
 
         if ( postString.isNullOrEmpty()) {
             finish()
         }
-        var parentPost: Post = Gson().fromJson(postString, Post::class.java)
-        var reactionsManager = ReactionsManager()
+        val parentPost: Post = Gson().fromJson(postString, Post::class.java)
 
         binding.nameUserPostCommentView.text = parentPost.user.name
         binding.contentPostCommentView.text = parentPost.content
         binding.likesCount.text = parentPost.reactions.like.toString()
+        checkButtonState(parentPost)
+
+        binding.likeButton.setOnClickListener {
+            onLike(parentPost)
+            checkButtonState(parentPost)
+        }
+
+
+
 
         subToComments(parentPost)
 
 
-        var newComment = fun () {
+        val newComment = fun () {
             val i = Intent(this@CommentsActivity, AddCommentActivity::class.java)
             i.putExtra("post", postString)
             startActivity(i)
         }
        // var commentList = listOf(Comment("test","This is the message", User(1, "Serg")),Comment("id","Another message", User(2, "L'autre")))
 
-        var toCreateComment = fun (ids: String): Unit {
+        val toCreateComment = fun (ids: String): Unit {
             val i = Intent(this@CommentsActivity, AddCommentActivity::class.java)
             i.putExtra("id", ids)
             startActivity(i)
@@ -69,6 +77,8 @@ class CommentsActivity : AppCompatActivity() {
         binding.commentButton.setOnClickListener { newComment() }
     }
 
+
+
     private fun subToComments(post: Post){
         val ref = database.getReference("posts").child(post.id).child("reactions").child("comments")
         Log.d(TAG, "subToComments: $ref")
@@ -76,12 +86,12 @@ class CommentsActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 listComment = listOf()
                 for (snapshot in task.result!!.children) {
-                    var id = snapshot.child("id").value.toString()
-                    var content = snapshot.child("content").value.toString()
-                    var name = snapshot.child("user").child("name").value.toString()
-                    var userId = snapshot.child("user").child("id").value.toString()
-                    var user = User(userId, name)
-                    var comment = Comment(id, content, user)
+                    val id = snapshot.child("id").value.toString()
+                    val content = snapshot.child("content").value.toString()
+                    val name = snapshot.child("user").child("name").value.toString()
+                    val userId = snapshot.child("user").child("id").value.toString()
+                    val user = User(userId, name)
+                    val comment = Comment(id, content, user)
                     listComment += comment
                 }
                 listComment = listComment.drop(1)
@@ -97,6 +107,30 @@ class CommentsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         subToComments(parentPost)
+    }
+
+    private fun onLike (post: Post): Unit {
+        val moreLess: Int = if (post.reactions.userLiked) -1 else 1
+
+        val database = Firebase.database
+        val postRef = database.getReference("posts").child(post.id)
+        postRef.child("reactions").child("like").setValue(post.reactions.like + moreLess)
+        // readDataFromFirebase()
+
+        post.reactions.userLiked = !post.reactions.userLiked
+        post.reactions.like += moreLess
+        binding.likesCount.text = post.reactions.like.toString()
+
+    }
+
+    private fun checkButtonState(post: Post): Unit {
+
+        if (post.reactions.userLiked){
+            binding.likeButton.text = "unlike"
+        }
+        else{
+            binding.likeButton.text = "like"
+        }
     }
 
 
