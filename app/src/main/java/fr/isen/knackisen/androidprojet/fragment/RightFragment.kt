@@ -92,7 +92,7 @@ class RightFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 100 && resultCode == -1) {
             profilePicture = data?.data
-            Picasso.get().load(profilePicture).into(binding.profilePicture)
+            Picasso.get().load(profilePicture).fit().centerCrop().into(binding.profilePicture)
         }
     }
 
@@ -147,7 +147,7 @@ class RightFragment : Fragment() {
         val imageRef = storageRef.child("profilePictures/${user.uid}")
         imageRef.downloadUrl.addOnSuccessListener {
             Log.d("DOWNLOAD", "SUCCESS")
-            Picasso.get().load(it).into(binding.profilePicture)
+            Picasso.get().load(it).fit().centerCrop().into(binding.profilePicture)
             binding.profilePicture.visibility = View.VISIBLE
             binding.progressBar2.visibility = View.GONE
         }.addOnFailureListener {
